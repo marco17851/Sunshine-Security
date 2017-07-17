@@ -25,6 +25,7 @@ import android.support.v4.app.ShareCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -128,7 +129,9 @@ public class DetailActivity extends AppCompatActivity implements
         MenuInflater inflater = getMenuInflater();
         /* Use the inflater's inflate method to inflate our menu layout to this menu */
         inflater.inflate(R.menu.detail, menu);
+
         /* Return true so that the menu is displayed in the Toolbar */
+        super.onCreateOptionsMenu(menu);
         return true;
     }
 
