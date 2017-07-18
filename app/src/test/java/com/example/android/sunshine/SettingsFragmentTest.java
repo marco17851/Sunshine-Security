@@ -1,8 +1,11 @@
 package com.example.android.sunshine;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceManager;
 import android.view.View;
 
@@ -16,6 +19,9 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.support.v4.SupportFragmentTestUtil;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -37,6 +43,13 @@ public class SettingsFragmentTest {
     }
 
     @Test
+    public void shouldLetUserChangeLocation() {
+        sharedPreferences.edit().putString("location", "Paris, France").apply();
+
+        assertEquals("Paris, France", this.sharedPreferences.getString("location", ""));
+    }
+
+    @Test
     public void preferencesFragmentShouldShowDefaultNotificationsValue() {
         SupportFragmentTestUtil.startFragment(fragment, SettingsActivity.class);
 
@@ -51,14 +64,15 @@ public class SettingsFragmentTest {
         assertEquals(false, sharedPreferences.getBoolean("enable_notifications", true));
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Test
-    public void shouldLetUserAddMultipleLocations() {
-        assertEquals(1+1, 2);
+    public void shouldLetUserAddMultipleLocationsToWatch() {
+        Set<String> locations = new HashSet<>();
+        locations.add("New York, New York");
+        locations.add("Paris, France");
+        locations.add("Seoul, South Korea");
+        sharedPreferences.edit().putStringSet("watch_locations", locations).apply();
 
-    }
-
-    @Test
-    public void shouldNotLetUserAddAlreadyExistingCity() {
-        assertEquals(true, true);
+        assertEquals(sharedPreferences.getStringSet("watch_locations", null), locations);
     }
 }

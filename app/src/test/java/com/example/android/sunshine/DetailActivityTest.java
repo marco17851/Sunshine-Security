@@ -36,9 +36,6 @@ public class DetailActivityTest {
         DetailActivity dActivity = Robolectric.buildActivity(DetailActivity.class, intent).create().visible().get();
 
         Menu menu = Shadows.shadowOf(dActivity).getOptionsMenu();
-        if (menu == null){
-            System.out.println("MENU IS NULL");
-        }
 
         MenuItem item = menu.findItem(R.id.action_settings);
         assertEquals(item.getTitle().toString(), "Settings");
