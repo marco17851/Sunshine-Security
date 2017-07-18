@@ -366,4 +366,14 @@ public class MainActivity extends AppCompatActivity implements
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(findViewById(R.id.navigation_drawer))){
+            mDrawerLayout.closeDrawers();
+            return;
+        }
+
+        super.onBackPressed();
+    }
 }
