@@ -63,6 +63,14 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/navigation_header">
+        
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/navigation_drawer_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_add_circle_outline_white_24dp" />
 
     </android.support.design.widget.NavigationView>
 
