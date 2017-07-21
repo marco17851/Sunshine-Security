@@ -246,8 +246,13 @@
         High:<xliff:g id="high">%2$s</xliff:g>
         Low:<xliff:g id="low">%3$s</xliff:g>
     </string>
+
+    <!-- Drawer Strings -->
     <string name="drawer_open">Open</string>
     <string name="drawer_closed">Closed</string>
-    <string name="header_title">Cities</string>
+    <string name="header_title">Watched Locations</string>
+    <string name="header_description">Enter any locations whose weather you wish to follow. Their daily weather will show up here.</string>
+    <string name="drawer_body_empty">You have not added any locations :(</string>
+    <string name="hint_watchlist">New York, New York</string>
 
 </resources>

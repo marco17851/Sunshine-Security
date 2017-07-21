@@ -40,6 +40,4 @@ public class DetailActivityTest {
         MenuItem item = menu.findItem(R.id.action_settings);
         assertEquals(item.getTitle().toString(), "Settings");
     }
-
-
 }

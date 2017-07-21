@@ -18,15 +18,20 @@ package com.example.android.sunshine;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
+import android.util.Log;
 
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.data.WeatherContract;
 import com.example.android.sunshine.sync.SunshineSyncUtils;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The SettingsFragment serves as the display for all of the user's settings. In Sunshine, the
@@ -67,9 +72,20 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         int count = prefScreen.getPreferenceCount();
         for (int i = 0; i < count; i++) {
             Preference p = prefScreen.getPreference(i);
-            if (!(p instanceof CheckBoxPreference)) {
+            if (!(p instanceof CheckBoxPreference) && !(p instanceof WatchlistPreference)) {
                 String value = sharedPreferences.getString(p.getKey(), "");
                 setPreferenceSummary(p, value);
+            }
+            if (p instanceof WatchlistPreference){
+                Set<String> values = sharedPreferences.getStringSet(p.getKey(), new HashSet<String>());
+
+                if (values.contains(null)){
+                    values.remove(null);
+                }
+
+                if (values != null) {
+                    setPreferenceSummary(p, values);
+                }
             }
         }
     }
@@ -105,9 +121,33 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         }
         Preference preference = findPreference(key);
         if (null != preference) {
-            if (!(preference instanceof CheckBoxPreference)) {
+            if (!(preference instanceof CheckBoxPreference) && !(preference instanceof WatchlistPreference)) {
                 setPreferenceSummary(preference, sharedPreferences.getString(key, ""));
             }
+        }
+    }
+
+    @Override
+    public void onDisplayPreferenceDialog(Preference preference) {
+        // Try if the preference is one of our custom Preferences
+        DialogFragment dialogFragment = null;
+        if (preference instanceof WatchlistPreference) {
+            // Create a new instance of TimePreferenceDialogFragment with the key of the related
+            // Preference
+            dialogFragment = WatchlistPreferenceFragmentCompat
+                    .newInstance(preference.getKey());
+        }
+
+        // If it was one of our cutom Preferences, show its dialog
+        if (dialogFragment != null) {
+            dialogFragment.setTargetFragment(this, 0);
+            dialogFragment.show(this.getFragmentManager(),
+                    "android.support.v7.preference" +
+                            ".PreferenceFragment.DIALOG");
+        }
+        // Could not be handled here. Try with the super method.
+        else {
+            super.onDisplayPreferenceDialog(preference);
         }
     }
 }

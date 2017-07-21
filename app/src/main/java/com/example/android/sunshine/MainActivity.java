@@ -34,11 +34,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.data.WeatherContract;
 import com.example.android.sunshine.sync.SunshineSyncUtils;
 import com.example.android.sunshine.utilities.SunshineDrawerUtils;
+
+import org.w3c.dom.Text;
+
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>,
@@ -86,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private Toolbar mToolbar;
+    private TextView mEmptyBody;
+    private RecyclerView mNavRecyclerView;
 
 
     @Override
@@ -94,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_forecast);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        mEmptyBody = (TextView) findViewById(R.id.navigation_body_text);
 
         mToolbar = (Toolbar) findViewById(R.id.navigation_toolbar);
         setSupportActionBar(mToolbar);
@@ -105,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
+        mNavRecyclerView = (RecyclerView) findViewById(R.id.navigation_recycler_view);
 
         /*
          * Using findViewById, we get a reference to our RecyclerView from xml. This allows us to
@@ -172,8 +182,33 @@ public class MainActivity extends AppCompatActivity implements
          */
         getSupportLoaderManager().initLoader(ID_FORECAST_LOADER, null, this);
 
-        SunshineSyncUtils.initialize(this);
+        Set<String> mWatchedLocations = SunshineDrawerUtils.getLocations(this);
+        updateWatchedLocations(mWatchedLocations);
 
+        SunshineSyncUtils.initialize(this);
+    }
+
+    public void updateWatchedLocations(){
+        updateWatchedLocations(SunshineDrawerUtils.getLocations(this));
+    }
+
+    private void updateWatchedLocations(Set<String> mWatchedLocations) {
+        int size = mWatchedLocations.size();
+        if (size > 0){
+            updateDrawer(mWatchedLocations);
+        } else {
+            showEmptyBody();
+        }
+    }
+
+    private void updateDrawer(Set<String> mWatchedLocations) {
+        mEmptyBody.setVisibility(View.GONE);
+        mNavRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void showEmptyBody() {
+        mEmptyBody.setVisibility(View.VISIBLE);
+        mNavRecyclerView.setVisibility(View.GONE);
     }
 
     /**

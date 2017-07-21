@@ -59,10 +59,26 @@
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_drawer"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/navigation_header">
+
+        <TextView
+            android:id="@+id/navigation_body_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/drawer_body_empty"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/navigation_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
         
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/navigation_drawer_fab"
