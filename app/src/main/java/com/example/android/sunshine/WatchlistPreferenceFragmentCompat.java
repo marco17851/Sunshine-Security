@@ -8,7 +8,7 @@ import android.widget.EditText;
 
 public class WatchlistPreferenceFragmentCompat extends PreferenceDialogFragmentCompat {
 
-    private EditText mUserInput;
+//    private EditText mUserInput;
 
     public static WatchlistPreferenceFragmentCompat newInstance(
             String key) {
@@ -25,12 +25,12 @@ public class WatchlistPreferenceFragmentCompat extends PreferenceDialogFragmentC
     protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
 
-        mUserInput = view.findViewById(R.id.edit);
-
-        // Exception when there is no TimePicker
-        if (mUserInput == null) {
-            throw new IllegalStateException("Dialog is missing an EditText view");
-        }
+//        mUserInput = view.findViewById(R.id.edit);
+//
+//        // Exception when there is no TimePicker
+//        if (mUserInput == null) {
+//            throw new IllegalStateException("Dialog is missing an EditText view");
+//        }
 
         String input = "";
         DialogPreference preference = getPreference();
@@ -39,25 +39,25 @@ public class WatchlistPreferenceFragmentCompat extends PreferenceDialogFragmentC
         }
 
         // Set the time to the TimePicker
-        if (input != null && !input.equals("")) {
-            mUserInput.setText(input);
-        }
+//        if (input != null && !input.equals("")) {
+//            mUserInput.setText(input);
+//        }
     }
 
     @Override
     public void onDialogClosed(boolean positiveResult) {
-        if (positiveResult) {
-            String location = mUserInput.getText().toString();
-
-            // Get the related Preference and save the value
-            DialogPreference preference = getPreference();
-            if (preference instanceof WatchlistPreference) {
-                WatchlistPreference watchlistPreference =
-                        ((WatchlistPreference) preference);
-                // This allows the client to ignore the user value.
-
-                watchlistPreference.setLocation(location);
-            }
-        }
+//        if (positiveResult) {
+//            String location = mUserInput.getText().toString();
+//
+//            // Get the related Preference and save the value
+//            DialogPreference preference = getPreference();
+//            if (preference instanceof WatchlistPreference) {
+//                WatchlistPreference watchlistPreference =
+//                        ((WatchlistPreference) preference);
+//                // This allows the client to ignore the user value.
+//
+//                watchlistPreference.setLocation(location);
+//            }
+//        }
     }
 }

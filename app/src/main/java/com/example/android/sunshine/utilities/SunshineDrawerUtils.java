@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.HashSet;
 import java.util.Set;

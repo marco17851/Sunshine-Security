@@ -41,7 +41,7 @@ public class SunshineDrawerUtilsTest {
         correctLocations.add("Seoul, South Korea");
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application);
-        preferences.edit().putStringSet("watch_list", correctLocations).commit();
+        preferences.edit().putStringSet("watch_locations", correctLocations).apply();
 
         Set<String> retrievedLocations = SunshineDrawerUtils.getLocations(RuntimeEnvironment.application);
 

@@ -46,27 +46,27 @@ public class WatchlistPreference extends DialogPreference {
         return mLocation;
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
-    public void setLocation(String location) {
-        mLocation = location;
-        // Save to Shared Preferences
-        Set<String> stringSet = getPersistedStringSet(DEFAULT_VALUE);
-        stringSet.add(mLocation);
-
-        persistStringSet(stringSet);
-    }
+//    @TargetApi(Build.VERSION_CODES.N)
+//    public void setLocation(String location) {
+//        mLocation = location;
+//        // Save to Shared Preferences
+//        Set<String> stringSet = getPersistedStringSet(DEFAULT_VALUE);
+//        stringSet.add(mLocation);
+//
+//        persistStringSet(stringSet);
+//    }
 
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
         return a.getString(index);
     }
 
-    @Override
-    protected void onSetInitialValue(boolean restorePersistedValue,
-                                     Object defaultValue) {
-        // Read the value. Use the default value if it is not possible.
-        setLocation((String) defaultValue);
-    }
+//    @Override
+//    protected void onSetInitialValue(boolean restorePersistedValue,
+//                                     Object defaultValue) {
+//        // Read the value. Use the default value if it is not possible.
+//        setLocation((String) defaultValue);
+//    }
 
     @Override
     public int getDialogLayoutResource() {
