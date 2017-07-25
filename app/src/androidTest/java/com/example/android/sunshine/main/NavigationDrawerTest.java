@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import java.util.HashSet;
 import java.util.Set;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -64,18 +65,23 @@ public class NavigationDrawerTest {
 
         addLocationToWatchList(new_york);
 
-        activityRule.getActivity().updateWatchedLocations();
+        activityRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                activityRule.getActivity().updateWatchedLocations();
+            }
+        });
 
         onView(ViewMatchers.withId(R.id.navigation_body_text)).check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
         onView(ViewMatchers.withId(R.id.navigation_recycler_view)).check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
-        onView(ViewMatchers.withId(R.id.navigation_recycler_view)).check(matches(withText(new_york)));
+        onView(ViewMatchers.withId(R.id.navigation_rec_location)).check(matches(withText(new_york)));
     }
 
     private void addLocationToWatchList(String location) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activityRule.getActivity().getApplicationContext());
-        Set<String> locations = preferences.getStringSet("watch_list", new HashSet<String>());
+        Set<String> locations = preferences.getStringSet("watch_locations", new HashSet<String>());
         locations.add(location);
-        preferences.edit().putStringSet("watch_list", locations).commit();
+        preferences.edit().putStringSet("watch_locations", locations).commit();
     }
 }

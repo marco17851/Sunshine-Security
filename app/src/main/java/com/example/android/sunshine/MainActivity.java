@@ -16,6 +16,7 @@
 package com.example.android.sunshine;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -93,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements
     private Toolbar mToolbar;
     private TextView mEmptyBody;
     private RecyclerView mNavRecyclerView;
+    private WatchlistAdapter mWatchlistAdapter;
 
 
     @Override
@@ -169,9 +172,13 @@ public class MainActivity extends AppCompatActivity implements
          */
         mForecastAdapter = new ForecastAdapter(this, this);
 
+        mWatchlistAdapter = new WatchlistAdapter(this);
+
         /* Setting the adapter attaches it to the RecyclerView in our layout. */
         mRecyclerView.setAdapter(mForecastAdapter);
 
+        mNavRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mNavRecyclerView.setAdapter(mWatchlistAdapter);
 
         showLoading();
 
@@ -182,8 +189,7 @@ public class MainActivity extends AppCompatActivity implements
          */
         getSupportLoaderManager().initLoader(ID_FORECAST_LOADER, null, this);
 
-        Set<String> mWatchedLocations = SunshineDrawerUtils.getLocations(this);
-        updateWatchedLocations(mWatchedLocations);
+        updateWatchedLocations(SunshineDrawerUtils.getLocations(this));
 
         SunshineSyncUtils.initialize(this);
     }
@@ -193,7 +199,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void updateWatchedLocations(Set<String> mWatchedLocations) {
+        mWatchlistAdapter.setLocations(mWatchedLocations);
         int size = mWatchedLocations.size();
+
         if (size > 0){
             updateDrawer(mWatchedLocations);
         } else {
@@ -204,6 +212,8 @@ public class MainActivity extends AppCompatActivity implements
     private void updateDrawer(Set<String> mWatchedLocations) {
         mEmptyBody.setVisibility(View.GONE);
         mNavRecyclerView.setVisibility(View.VISIBLE);
+
+        mWatchlistAdapter.notifyDataSetChanged();
     }
 
     private void showEmptyBody() {
