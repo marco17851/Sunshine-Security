@@ -47,7 +47,7 @@ class WatchlistAdapter extends RecyclerView.Adapter<WatchlistAdapter.WatchlistAd
 
     @Override
     public int getItemCount() {
-        return 1;
+        return mLocations.size();
     }
 
     /**

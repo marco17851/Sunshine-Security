@@ -15,11 +15,17 @@ public class SunshineDrawerUtils {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static Set<String> getLocations(@NonNull final Context context){
-
-        Set<String> defaultSet = new HashSet<>();
-
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        return sharedPreferences.getStringSet("watch_locations", defaultSet);
+        return sharedPreferences.getStringSet("watch_locations", new HashSet<String>());
+    }
+
+    public static void startWatchingLocation(@NonNull final Context context, String location) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        Set<String> locations = sharedPreferences.getStringSet("watch_locations", new HashSet<String>());
+        locations.add(location);
+
+        sharedPreferences.edit().putStringSet("watch_locations", locations).apply();
     }
 }

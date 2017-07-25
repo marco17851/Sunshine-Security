@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements
     private TextView mEmptyBody;
     private RecyclerView mNavRecyclerView;
     private WatchlistAdapter mWatchlistAdapter;
+    private FloatingActionButton mFAB;
 
 
     @Override
@@ -106,6 +108,16 @@ public class MainActivity extends AppCompatActivity implements
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         mEmptyBody = (TextView) findViewById(R.id.navigation_body_text);
+
+        mFAB = (FloatingActionButton) findViewById(R.id.navigation_drawer_fab);
+
+        mFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddLocationActivity.class);
+                startActivity(intent);
+            }
+        });
 
         mToolbar = (Toolbar) findViewById(R.id.navigation_toolbar);
         setSupportActionBar(mToolbar);
@@ -320,6 +332,12 @@ public class MainActivity extends AppCompatActivity implements
          * displaying the data.
          */
         mForecastAdapter.swapCursor(null);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateWatchedLocations();
     }
 
     /**

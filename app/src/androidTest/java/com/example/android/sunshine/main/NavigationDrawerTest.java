@@ -12,6 +12,7 @@ import android.util.Log;
 import com.example.android.sunshine.MainActivity;
 import com.example.android.sunshine.R;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,6 +25,8 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -38,6 +41,11 @@ public class NavigationDrawerTest {
     @Before
     public void setup(){
         onView(ViewMatchers.withId(R.id.drawer_layout)).perform(DrawerActions.open());
+    }
+
+    @After
+    public void cleanup(){
+        clearLocationWatchlist();
     }
 
     @Test
@@ -78,10 +86,28 @@ public class NavigationDrawerTest {
         onView(ViewMatchers.withId(R.id.navigation_rec_location)).check(matches(withText(new_york)));
     }
 
+    private void clearLocationWatchlist() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activityRule.getActivity().getApplicationContext());
+        Set<String> locations = preferences.getStringSet("watch_locations", new HashSet<String>());
+        locations.clear();
+        preferences.edit().putStringSet("watch_locations", locations).apply();
+    }
+
+    @Test
+    public void userShouldBeAbleToAddNewLocationsUsingFAB(){
+        String paris = "Paris, France";
+
+        onView(ViewMatchers.withId(R.id.navigation_drawer_fab)).perform(click());
+        onView(ViewMatchers.withId(R.id.new_location_input)).perform(typeText(paris)).perform(closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.save_location)).perform(click());
+
+        onView(ViewMatchers.withId(R.id.navigation_rec_location)).check(matches(withText(paris)));
+    }
+
     private void addLocationToWatchList(String location) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activityRule.getActivity().getApplicationContext());
         Set<String> locations = preferences.getStringSet("watch_locations", new HashSet<String>());
         locations.add(location);
-        preferences.edit().putStringSet("watch_locations", locations).commit();
+        preferences.edit().putStringSet("watch_locations", locations).apply();
     }
 }
