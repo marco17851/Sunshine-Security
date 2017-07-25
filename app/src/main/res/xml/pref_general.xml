@@ -39,9 +39,4 @@
         android:summaryOn="@string/pref_enable_notifications_true"
         android:title="@string/pref_enable_notifications_label" />
 
-    <com.example.android.sunshine.WatchlistPreference
-        android:defaultValue="@string/hint_watchlist"
-        android:key="watch_locations"
-        android:title="@string/header_title" />
-
 </PreferenceScreen>

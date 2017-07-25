@@ -73,17 +73,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         int count = prefScreen.getPreferenceCount();
         for (int i = 0; i < count; i++) {
             Preference p = prefScreen.getPreference(i);
-            if (!(p instanceof CheckBoxPreference) && !(p instanceof WatchlistPreference)) {
+            if (!(p instanceof CheckBoxPreference)) {
                 String value = sharedPreferences.getString(p.getKey(), "");
                 setPreferenceSummary(p, value);
-            }
-            if (p instanceof WatchlistPreference){
-                Set<String> values = sharedPreferences.getStringSet(p.getKey(), new HashSet<String>());
-
-                if (values.contains(null)){
-                    values.remove(null);
-                }
-                setPreferenceSummary(p, values);
             }
         }
     }
@@ -119,7 +111,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         }
         Preference preference = findPreference(key);
         if (null != preference) {
-            if (!(preference instanceof CheckBoxPreference) && !(preference instanceof WatchlistPreference)) {
+            if (!(preference instanceof CheckBoxPreference)) {
                 setPreferenceSummary(preference, sharedPreferences.getString(key, ""));
             }
         }
@@ -129,12 +121,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
     public void onDisplayPreferenceDialog(Preference preference) {
         // Try if the preference is one of our custom Preferences
         DialogFragment dialogFragment = null;
-        if (preference instanceof WatchlistPreference) {
-            // Create a new instance of TimePreferenceDialogFragment with the key of the related
-            // Preference
-            dialogFragment = WatchlistPreferenceFragmentCompat
-                    .newInstance(preference.getKey());
-        }
 
         // If it was one of our cutom Preferences, show its dialog
         if (dialogFragment != null) {
