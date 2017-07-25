@@ -29,7 +29,9 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.AllOf.allOf;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -83,14 +85,7 @@ public class NavigationDrawerTest {
         onView(ViewMatchers.withId(R.id.navigation_body_text)).check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
         onView(ViewMatchers.withId(R.id.navigation_recycler_view)).check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
-        onView(ViewMatchers.withId(R.id.navigation_rec_location)).check(matches(withText(new_york)));
-    }
-
-    private void clearLocationWatchlist() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activityRule.getActivity().getApplicationContext());
-        Set<String> locations = preferences.getStringSet("watch_locations", new HashSet<String>());
-        locations.clear();
-        preferences.edit().putStringSet("watch_locations", locations).apply();
+        onView(ViewMatchers.withId(R.id.location)).check(matches(withText(new_york)));
     }
 
     @Test
@@ -101,7 +96,33 @@ public class NavigationDrawerTest {
         onView(ViewMatchers.withId(R.id.new_location_input)).perform(typeText(paris)).perform(closeSoftKeyboard());
         onView(ViewMatchers.withId(R.id.save_location)).perform(click());
 
-        onView(ViewMatchers.withId(R.id.navigation_rec_location)).check(matches(withText(paris)));
+        onView(ViewMatchers.withId(R.id.location)).check(matches(withText(paris)));
+    }
+
+    @Test
+    public void watchlistShouldShowSimpleWeatherDetails(){
+        String paris = "Paris, France";
+
+        onView(ViewMatchers.withId(R.id.navigation_drawer_fab)).perform(click());
+        onView(ViewMatchers.withId(R.id.new_location_input)).perform(typeText(paris)).perform(closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.save_location)).perform(click());
+
+        onView(ViewMatchers.withId(R.id.location)).check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        onView(allOf(ViewMatchers.withId(R.id.high_temperature), withParent(withId(R.id.navigation_list_item))))
+                .check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        onView(allOf(ViewMatchers.withId(R.id.low_temperature), withParent(withId(R.id.navigation_list_item))))
+                .check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        onView(allOf(ViewMatchers.withId(R.id.weather_description), withParent(withId(R.id.navigation_list_item))))
+                .check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        onView(allOf(ViewMatchers.withId(R.id.weather_icon), withParent(withId(R.id.navigation_list_item))))
+                .check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+    }
+
+    private void clearLocationWatchlist() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activityRule.getActivity().getApplicationContext());
+        Set<String> locations = preferences.getStringSet("watch_locations", new HashSet<String>());
+        locations.clear();
+        preferences.edit().putStringSet("watch_locations", locations).apply();
     }
 
     private void addLocationToWatchList(String location) {

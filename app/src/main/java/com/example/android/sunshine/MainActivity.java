@@ -38,6 +38,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.data.WeatherContract;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements
      * it is unique and consistent.
      */
     private static final int ID_FORECAST_LOADER = 44;
+    private static final int ID_WATCHLIST_LOADER = 33;
 
     private ForecastAdapter mForecastAdapter;
     private RecyclerView mRecyclerView;
@@ -200,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements
          * the last created loader is re-used.
          */
         getSupportLoaderManager().initLoader(ID_FORECAST_LOADER, null, this);
+        getSupportLoaderManager().initLoader(ID_WATCHLIST_LOADER, null, this);
 
         updateWatchedLocations(SunshineDrawerUtils.getLocations(this));
 
@@ -270,21 +273,23 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public Loader<Cursor> onCreateLoader(int loaderId, Bundle bundle) {
-
+        Uri forecastQueryUri;
+        String sortOrder;
+        String selection;
 
         switch (loaderId) {
 
             case ID_FORECAST_LOADER:
                 /* URI for all rows of weather data in our weather table */
-                Uri forecastQueryUri = WeatherContract.WeatherEntry.CONTENT_URI;
+                forecastQueryUri = WeatherContract.WeatherEntry.CONTENT_URI;
                 /* Sort order: Ascending by date */
-                String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+                sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
                 /*
                  * A SELECTION in SQL declares which rows you'd like to return. In our case, we
                  * want all weather data from today onwards that is stored in our weather table.
                  * We created a handy method to do that in our WeatherEntry class.
                  */
-                String selection = WeatherContract.WeatherEntry.getSqlSelectForTodayOnwards();
+                selection = WeatherContract.WeatherEntry.getSqlSelectForTodayOnwards();
 
                 return new CursorLoader(this,
                         forecastQueryUri,
@@ -293,6 +298,24 @@ public class MainActivity extends AppCompatActivity implements
                         null,
                         sortOrder);
 
+            case ID_WATCHLIST_LOADER:
+                /* URI for all rows of weather data in our weather table */
+                forecastQueryUri = WeatherContract.WeatherEntry.CONTENT_URI;
+                /* Sort order: Ascending by date */
+                sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+                /*
+                 * A SELECTION in SQL declares which rows you'd like to return. In our case, we
+                 * want all weather data from today onwards that is stored in our weather table.
+                 * We created a handy method to do that in our WeatherEntry class.
+                 */
+                selection = WeatherContract.WeatherEntry.getSqlSelectForTodayOnwards();
+
+                return new CursorLoader(this,
+                        forecastQueryUri,
+                        MAIN_FORECAST_PROJECTION,
+                        selection,
+                        null,
+                        sortOrder);
             default:
                 throw new RuntimeException("Loader Not Implemented: " + loaderId);
         }
@@ -311,12 +334,17 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-
-        mForecastAdapter.swapCursor(data);
-        if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
-        mRecyclerView.smoothScrollToPosition(mPosition);
-        if (data.getCount() != 0) showWeatherDataView();
+        if (loader.getId() == ID_FORECAST_LOADER) {
+            mForecastAdapter.swapCursor(data);
+            if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+            mRecyclerView.smoothScrollToPosition(mPosition);
+            if (data.getCount() != 0) showWeatherDataView();
+        } else if (loader.getId() == ID_WATCHLIST_LOADER){
+            mWatchlistAdapter.swapCursor(data);
+            if (data.getCount() != 0){
+                Toast.makeText(this, "No data to be refreshed.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     /**
