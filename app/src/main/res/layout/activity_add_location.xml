@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PEANUT BUTTER JELLY TIE"
+        android:text="@string/add_location"
         android:id="@+id/textView"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -32,7 +32,7 @@
         android:id="@+id/save_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="BUTTON"
+        android:text="@string/save_location"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="8dp"

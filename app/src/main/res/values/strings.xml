@@ -249,5 +249,7 @@
     <string name="drawer_body_empty">You have not added any locations :(</string>
     <string name="hint_watchlist">New York, New York</string>
     <string name="title_activity_add_location">AddLocationActivity</string>
+    <string name="save_location">Save Location</string>
+    <string name="add_location">Add A Location</string>
 
 </resources>
