@@ -70,25 +70,6 @@ public class NavigationDrawerTest {
     }
 
     @Test
-    public void shouldShowWatchedCitiesIfUserHasAddedThemToTheirList(){
-        String new_york = "New York, New York";
-
-        addLocationToWatchList(new_york);
-
-        activityRule.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                activityRule.getActivity().updateWatchedLocations();
-            }
-        });
-
-        onView(ViewMatchers.withId(R.id.navigation_body_text)).check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
-        onView(ViewMatchers.withId(R.id.navigation_recycler_view)).check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
-
-        onView(ViewMatchers.withId(R.id.location)).check(matches(withText(new_york)));
-    }
-
-    @Test
     public void userShouldBeAbleToAddNewLocationsUsingFAB(){
         String paris = "Paris, France";
 
@@ -100,14 +81,16 @@ public class NavigationDrawerTest {
     }
 
     @Test
-    public void watchlistShouldShowSimpleWeatherDetails(){
+    public void watchlistShouldShowLocationAndWeatherDetails(){
         String paris = "Paris, France";
 
         onView(ViewMatchers.withId(R.id.navigation_drawer_fab)).perform(click());
         onView(ViewMatchers.withId(R.id.new_location_input)).perform(typeText(paris)).perform(closeSoftKeyboard());
         onView(ViewMatchers.withId(R.id.save_location)).perform(click());
 
-        onView(ViewMatchers.withId(R.id.location)).check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        onView(ViewMatchers.withId(R.id.location))
+                .check(matches(withText(paris)))
+                .check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         onView(allOf(ViewMatchers.withId(R.id.high_temperature), withParent(withId(R.id.navigation_list_item))))
                 .check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         onView(allOf(ViewMatchers.withId(R.id.low_temperature), withParent(withId(R.id.navigation_list_item))))
@@ -122,13 +105,6 @@ public class NavigationDrawerTest {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activityRule.getActivity().getApplicationContext());
         Set<String> locations = preferences.getStringSet("watch_locations", new HashSet<String>());
         locations.clear();
-        preferences.edit().putStringSet("watch_locations", locations).apply();
-    }
-
-    private void addLocationToWatchList(String location) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activityRule.getActivity().getApplicationContext());
-        Set<String> locations = preferences.getStringSet("watch_locations", new HashSet<String>());
-        locations.add(location);
         preferences.edit().putStringSet("watch_locations", locations).apply();
     }
 }
