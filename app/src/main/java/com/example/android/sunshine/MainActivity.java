@@ -31,6 +31,7 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -191,6 +192,24 @@ public class MainActivity extends AppCompatActivity implements
         /* Setting the adapter attaches it to the RecyclerView in our layout. */
         mRecyclerView.setAdapter(mForecastAdapter);
 
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                if (direction == ItemTouchHelper.RIGHT){
+                    int position = viewHolder.getAdapterPosition();
+
+                    mWatchlistAdapter.deleteLocation(position);
+                }
+            }
+        });
+
+        touchHelper.attachToRecyclerView(mNavRecyclerView);
+
         mNavRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mNavRecyclerView.setAdapter(mWatchlistAdapter);
 
@@ -207,10 +226,6 @@ public class MainActivity extends AppCompatActivity implements
         updateWatchedLocations(SunshineDrawerUtils.getLocations(this));
 
         SunshineSyncUtils.initialize(this);
-    }
-
-    public void updateWatchedLocations(){
-        updateWatchedLocations(SunshineDrawerUtils.getLocations(this));
     }
 
     private void updateWatchedLocations(Set<String> mWatchedLocations) {
@@ -365,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        updateWatchedLocations();
+        updateWatchedLocations(SunshineDrawerUtils.getLocations(this));
     }
 
     /**

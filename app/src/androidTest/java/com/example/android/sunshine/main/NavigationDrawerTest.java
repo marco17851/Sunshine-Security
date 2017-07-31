@@ -26,7 +26,9 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
@@ -99,6 +101,23 @@ public class NavigationDrawerTest {
                 .check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         onView(allOf(ViewMatchers.withId(R.id.weather_icon), withParent(withId(R.id.navigation_list_item))))
                 .check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+    }
+    
+    @Test
+    public void shouldBeAbleToDeleteLocationOnRightSwipe(){
+        String paris = "Paris, France";
+
+        onView(ViewMatchers.withId(R.id.navigation_drawer_fab)).perform(click());
+        onView(ViewMatchers.withId(R.id.new_location_input)).perform(typeText(paris)).perform(closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.save_location)).perform(click());
+
+        onView(ViewMatchers.withId(R.id.location))
+                .check(matches(withText(paris)))
+                .check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+
+        onView(withId(R.id.location))
+                .perform(swipeRight())
+                .check(doesNotExist());
     }
 
     private void clearLocationWatchlist() {

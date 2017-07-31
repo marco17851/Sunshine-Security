@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.sunshine.utilities.SunshineDateUtils;
+import com.example.android.sunshine.utilities.SunshineDrawerUtils;
 import com.example.android.sunshine.utilities.SunshineWeatherUtils;
 
 import java.util.ArrayList;
@@ -113,6 +114,12 @@ class WatchlistAdapter extends RecyclerView.Adapter<WatchlistAdapter.WatchlistAd
     @Override
     public int getItemCount() {
         return mLocations.size();
+    }
+
+    public void deleteLocation(int position) {
+        String location = mLocations.remove(position);
+        SunshineDrawerUtils.removeLocation(mContext, location);
+        notifyDataSetChanged();
     }
 
     /**

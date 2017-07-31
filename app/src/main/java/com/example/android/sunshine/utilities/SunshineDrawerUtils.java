@@ -28,4 +28,15 @@ public class SunshineDrawerUtils {
 
         sharedPreferences.edit().putStringSet("watch_locations", locations).apply();
     }
+
+    public static void removeLocation(@NonNull final Context context, String location) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        Set<String> locations = sharedPreferences.getStringSet("watch_locations", new HashSet<String>());
+        if (locations.contains(location)){
+            locations.remove(location);
+        }
+
+        sharedPreferences.edit().putStringSet("watch_locations", locations).apply();
+    }
 }
