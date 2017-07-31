@@ -205,6 +205,10 @@ public class MainActivity extends AppCompatActivity implements
 
                     mWatchlistAdapter.deleteLocation(position);
                 }
+
+                if (mWatchlistAdapter.getItemCount() == 0){
+                    updateWatchedLocations(SunshineDrawerUtils.getLocations(MainActivity.this));
+                }
             }
         });
 

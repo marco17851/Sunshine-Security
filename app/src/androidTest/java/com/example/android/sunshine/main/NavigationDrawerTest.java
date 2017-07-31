@@ -116,8 +116,8 @@ public class NavigationDrawerTest {
                 .check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         onView(withId(R.id.location))
-                .perform(swipeRight())
-                .check(doesNotExist());
+                .perform(swipeRight());
+        onView(ViewMatchers.withId(R.id.navigation_body_text)).check(matches(withText(R.string.drawer_body_empty)));
     }
 
     private void clearLocationWatchlist() {
