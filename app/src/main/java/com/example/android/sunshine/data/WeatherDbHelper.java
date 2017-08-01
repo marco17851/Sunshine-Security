@@ -43,7 +43,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
      * use-case, we wanted to watch out for it and warn you what could happen if you mistakenly
      * version your databases.
      */
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     public WeatherDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -72,20 +72,14 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                  * named "_ID". We use that here to designate our table's primary key.
                  */
                 WeatherEntry._ID               + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-
                 WeatherEntry.COLUMN_DATE       + " INTEGER NOT NULL, "                 +
-
                 WeatherEntry.COLUMN_WEATHER_ID + " INTEGER NOT NULL,"                  +
-
                 WeatherEntry.COLUMN_MIN_TEMP   + " REAL NOT NULL, "                    +
                 WeatherEntry.COLUMN_MAX_TEMP   + " REAL NOT NULL, "                    +
-
                 WeatherEntry.COLUMN_HUMIDITY   + " REAL NOT NULL, "                    +
                 WeatherEntry.COLUMN_PRESSURE   + " REAL NOT NULL, "                    +
-
                 WeatherEntry.COLUMN_WIND_SPEED + " REAL NOT NULL, "                    +
                 WeatherEntry.COLUMN_DEGREES    + " REAL NOT NULL, "                    +
-
                 /*
                  * To ensure this table can only contain one weather entry per date, we declare
                  * the date column to be unique. We also specify "ON CONFLICT REPLACE". This tells
@@ -94,11 +88,23 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                  */
                 " UNIQUE (" + WeatherEntry.COLUMN_DATE + ") ON CONFLICT REPLACE);";
 
+        final String SQL_CREATE_WATCHLIST_TABLE =
+
+                "CREATE TABLE " + WatchlistContract.WatchlistEntry.TABLE_NAME + " (" +
+                        WatchlistContract.WatchlistEntry._ID               + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        WatchlistContract.WatchlistEntry.COLUMN_DATE       + " INTEGER NOT NULL, "                 +
+                        WatchlistContract.WatchlistEntry.COLUMN_WEATHER_ID + " INTEGER NOT NULL,"                  +
+                        WatchlistContract.WatchlistEntry.COLUMN_MIN_TEMP   + " REAL NOT NULL, "                    +
+                        WatchlistContract.WatchlistEntry.COLUMN_MAX_TEMP   + " REAL NOT NULL, "                    +
+                        WatchlistContract.WatchlistEntry.COLUMN_LOCATION   + " TEXT NOT NULL, "                    +
+                        " UNIQUE (" + WatchlistContract.WatchlistEntry.COLUMN_LOCATION + ") ON CONFLICT REPLACE);";
+
         /*
          * After we've spelled out our SQLite table creation statement above, we actually execute
          * that SQL with the execSQL method of our SQLite database object.
          */
         sqLiteDatabase.execSQL(SQL_CREATE_WEATHER_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_WATCHLIST_TABLE);
     }
 
     /**
@@ -116,6 +122,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WeatherEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchlistContract.WatchlistEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 }

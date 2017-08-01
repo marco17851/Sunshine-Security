@@ -17,6 +17,7 @@ package com.example.android.sunshine.data;
 
 import android.annotation.TargetApi;
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -45,6 +46,8 @@ public class WeatherProvider extends ContentProvider {
      */
     public static final int CODE_WEATHER = 100;
     public static final int CODE_WEATHER_WITH_DATE = 101;
+    public static final int CODE_WATCHLIST = 200;
+    public static final int CODE_WATCHLIST_WITH_LOCATION = 201;
 
     /*
      * The URI Matcher used by this content provider. The leading "s" in this variable name
@@ -89,12 +92,16 @@ public class WeatherProvider extends ContentProvider {
         /* This URI is content://com.example.android.sunshine/weather/ */
         matcher.addURI(authority, WeatherContract.PATH_WEATHER, CODE_WEATHER);
 
+        matcher.addURI(authority, WatchlistContract.PATH_WATCHLIST, CODE_WATCHLIST);
+
+
         /*
          * This URI would look something like content://com.example.android.sunshine/weather/1472214172
          * The "/#" signifies to the UriMatcher that if PATH_WEATHER is followed by ANY number,
          * that it should return the CODE_WEATHER_WITH_DATE code
          */
         matcher.addURI(authority, WeatherContract.PATH_WEATHER + "/#", CODE_WEATHER_WITH_DATE);
+        matcher.addURI(authority, WatchlistContract.PATH_WATCHLIST + "/*", CODE_WATCHLIST_WITH_LOCATION);
 
         return matcher;
     }
@@ -285,6 +292,33 @@ public class WeatherProvider extends ContentProvider {
                 break;
             }
 
+            case CODE_WATCHLIST: {
+                cursor = mOpenHelper.getReadableDatabase().query(
+                        WatchlistContract.WatchlistEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+
+                break;
+            }
+
+            case CODE_WATCHLIST_WITH_LOCATION: {
+                String lastPathSegment = uri.getLastPathSegment();
+                cursor = mOpenHelper.getReadableDatabase().query(
+                        WatchlistContract.WatchlistEntry.TABLE_NAME,
+                        projection,
+                        WatchlistContract.WatchlistEntry.COLUMN_LOCATION + " = ? ",
+                        new String[]{lastPathSegment},
+                        null,
+                        null,
+                        sortOrder);
+
+                break;
+            }
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -326,6 +360,16 @@ public class WeatherProvider extends ContentProvider {
 
                 break;
 
+            case CODE_WATCHLIST_WITH_LOCATION:
+                String locationSelection = uri.getLastPathSegment();
+
+                numRowsDeleted = mOpenHelper.getWritableDatabase().delete(
+                        WatchlistContract.WatchlistEntry.TABLE_NAME,
+                        WatchlistContract.WatchlistEntry.COLUMN_LOCATION + " = ? ",
+                        new String[]{locationSelection});
+
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -354,20 +398,33 @@ public class WeatherProvider extends ContentProvider {
     }
 
     /**
-     * In Sunshine, we aren't going to do anything with this method. However, we are required to
-     * override it as WeatherProvider extends ContentProvider and insert is an abstract method in
-     * ContentProvider. Rather than the single insert method, we are only going to implement
-     * {@link WeatherProvider#bulkInsert}.
-     *
      * @param uri    The URI of the insertion request. This must not be null.
      * @param values A set of column_name/value pairs to add to the database.
      *               This must not be null
-     * @return nothing in Sunshine, but normally the URI for the newly inserted item.
+     * @return the URI for the newly inserted item.
      */
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        throw new RuntimeException(
-                "We are not implementing insert in Sunshine. Use bulkInsert instead");
+        long rowID;
+        switch (sUriMatcher.match(uri)) {
+            case CODE_WATCHLIST_WITH_LOCATION:
+                rowID = mOpenHelper.getWritableDatabase().insert(
+                        WatchlistContract.WatchlistEntry.TABLE_NAME,
+                        null,
+                        values);
+
+                break;
+
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        /* If we actually inserted any rows, notify that a change has occurred to this URI */
+        if (rowID != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return ContentUris.withAppendedId(uri, rowID);
     }
 
     @Override
