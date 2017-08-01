@@ -193,7 +193,7 @@ public class TestSunshineDatabase {
 
     @Test
     public void testDatabaseVersionWasIncremented() {
-        int expectedDatabaseVersion = 3;
+        int expectedDatabaseVersion = 4;
         String databaseVersionShouldBe1 = "Database version should be "
                 + expectedDatabaseVersion + " but isn't."
                 + "\n Database version: ";
