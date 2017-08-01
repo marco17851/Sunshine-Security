@@ -6,10 +6,9 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.preference.PreferenceManager;
-import android.util.Log;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class SunshineDrawerUtils {
 
@@ -17,13 +16,15 @@ public class SunshineDrawerUtils {
     public static Set<String> getLocations(@NonNull final Context context){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        return sharedPreferences.getStringSet("watch_locations", new HashSet<String>());
+        Set<String> watched_locations = sharedPreferences.getStringSet("watch_locations", new TreeSet<String>());
+
+        return watched_locations;
     }
 
     public static void startWatchingLocation(@NonNull final Context context, String location) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        Set<String> locations = sharedPreferences.getStringSet("watch_locations", new HashSet<String>());
+        Set<String> locations = sharedPreferences.getStringSet("watch_locations", new TreeSet<String>());
         locations.add(location);
 
         sharedPreferences.edit().putStringSet("watch_locations", locations).apply();
@@ -32,7 +33,7 @@ public class SunshineDrawerUtils {
     public static void removeLocation(@NonNull final Context context, String location) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        Set<String> locations = sharedPreferences.getStringSet("watch_locations", new HashSet<String>());
+        Set<String> locations = sharedPreferences.getStringSet("watch_locations", new TreeSet<String>());
         if (locations.contains(location)){
             locations.remove(location);
         }

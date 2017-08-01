@@ -46,7 +46,11 @@ class WatchlistAdapter extends RecyclerView.Adapter<WatchlistAdapter.WatchlistAd
         return new WatchlistAdapter.WatchlistAdapterViewHolder(view);
     }
 
-    void swapCursor(Cursor newCursor) {
+    public void swapCursor(Cursor newCursor) {
+        if (mCursor != null){
+            mCursor.close();
+        }
+
         mCursor = newCursor;
         notifyDataSetChanged();
     }
@@ -116,10 +120,12 @@ class WatchlistAdapter extends RecyclerView.Adapter<WatchlistAdapter.WatchlistAd
         return mLocations.size();
     }
 
-    public void deleteLocation(int position) {
+    public String deleteLocation(int position) {
         String location = mLocations.remove(position);
         SunshineDrawerUtils.removeLocation(mContext, location);
         notifyDataSetChanged();
+
+        return location;
     }
 
     /**

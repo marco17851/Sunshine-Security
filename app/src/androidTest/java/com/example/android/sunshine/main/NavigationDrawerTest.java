@@ -7,7 +7,6 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.preference.PreferenceManager;
-import android.util.Log;
 
 import com.example.android.sunshine.MainActivity;
 import com.example.android.sunshine.R;
@@ -18,17 +17,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
@@ -122,7 +119,7 @@ public class NavigationDrawerTest {
 
     private void clearLocationWatchlist() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activityRule.getActivity().getApplicationContext());
-        Set<String> locations = preferences.getStringSet("watch_locations", new HashSet<String>());
+        Set<String> locations = preferences.getStringSet("watch_locations", new TreeSet<String>());
         locations.clear();
         preferences.edit().putStringSet("watch_locations", locations).apply();
     }

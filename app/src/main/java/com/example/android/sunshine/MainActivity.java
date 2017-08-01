@@ -237,13 +237,13 @@ public class MainActivity extends AppCompatActivity implements
         int size = mWatchedLocations.size();
 
         if (size > 0){
-            updateDrawer(mWatchedLocations);
+            updateDrawer();
         } else {
             showEmptyBody();
         }
     }
 
-    private void updateDrawer(Set<String> mWatchedLocations) {
+    private void updateDrawer() {
         mEmptyBody.setVisibility(View.GONE);
         mNavRecyclerView.setVisibility(View.VISIBLE);
 
@@ -360,9 +360,6 @@ public class MainActivity extends AppCompatActivity implements
             if (data.getCount() != 0) showWeatherDataView();
         } else if (loader.getId() == ID_WATCHLIST_LOADER){
             mWatchlistAdapter.swapCursor(data);
-            if (data.getCount() != 0){
-                Toast.makeText(this, "No watchlist data to be refreshed.", Toast.LENGTH_SHORT).show();
-            }
         }
     }
 

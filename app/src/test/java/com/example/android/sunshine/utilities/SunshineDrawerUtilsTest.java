@@ -12,11 +12,11 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
@@ -35,7 +35,7 @@ public class SunshineDrawerUtilsTest {
 
     @Test
     public void shouldReturnCorrectListOfLocations(){
-        Set<String> correctLocations = new HashSet<>();
+        Set<String> correctLocations = new TreeSet<>();
         correctLocations.add("New York, New York");
         correctLocations.add("Paris, France");
         correctLocations.add("Seoul, South Korea");

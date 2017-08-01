@@ -6,11 +6,10 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.v7.preference.DialogPreference;
-import android.support.v7.preference.EditTextPreference;
 import android.util.AttributeSet;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class WatchlistPreference extends DialogPreference {
 
@@ -19,7 +18,7 @@ public class WatchlistPreference extends DialogPreference {
     private int mDialogLayoutResId = R.layout.dialog_add_to_watchlist;
 
 
-    private static final Set<String> DEFAULT_VALUE = new HashSet<>();
+    private static final Set<String> DEFAULT_VALUE = new TreeSet<>();
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public WatchlistPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {

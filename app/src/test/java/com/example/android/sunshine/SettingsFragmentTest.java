@@ -4,26 +4,20 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceManager;
-import android.view.View;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.support.v4.SupportFragmentTestUtil;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
@@ -67,7 +61,7 @@ public class SettingsFragmentTest {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Test
     public void shouldLetUserAddMultipleLocationsToWatch() {
-        Set<String> locations = new HashSet<>();
+        Set<String> locations = new TreeSet<>();
         locations.add("New York, New York");
         locations.add("Paris, France");
         locations.add("Seoul, South Korea");
