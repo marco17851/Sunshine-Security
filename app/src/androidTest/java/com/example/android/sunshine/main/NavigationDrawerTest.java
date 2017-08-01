@@ -69,18 +69,7 @@ public class NavigationDrawerTest {
     }
 
     @Test
-    public void userShouldBeAbleToAddNewLocationsUsingFAB(){
-        String paris = "Paris, France";
-
-        onView(ViewMatchers.withId(R.id.navigation_drawer_fab)).perform(click());
-        onView(ViewMatchers.withId(R.id.new_location_input)).perform(typeText(paris)).perform(closeSoftKeyboard());
-        onView(ViewMatchers.withId(R.id.save_location)).perform(click());
-
-        onView(ViewMatchers.withId(R.id.location)).check(matches(withText(paris)));
-    }
-
-    @Test
-    public void watchlistShouldShowLocationAndWeatherDetails(){
+    public void watchlistShouldShowLocationAndWeatherDetailsAfterAddedThroughFAB(){
         String paris = "Paris, France";
 
         onView(ViewMatchers.withId(R.id.navigation_drawer_fab)).perform(click());

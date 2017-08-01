@@ -19,6 +19,7 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import com.example.android.sunshine.data.SunshinePreferences;
+import com.example.android.sunshine.data.WatchlistContract;
 import com.example.android.sunshine.data.WeatherContract;
 
 import org.json.JSONArray;
@@ -69,9 +70,7 @@ public final class OpenWeatherJsonUtils {
      * now, we just convert the JSON into human-readable strings.
      *
      * @param forecastJsonStr JSON response from server
-     *
      * @return Array of Strings describing weather data
-     *
      * @throws JSONException If JSON data cannot be properly parsed
      */
     public static ContentValues[] getWeatherContentValuesFromJson(Context context, String forecastJsonStr)
@@ -180,5 +179,86 @@ public final class OpenWeatherJsonUtils {
         }
 
         return weatherContentValues;
+    }
+
+    public static ContentValues getLocationContentValuesFromJson(String location, String forecastJsonStr)
+            throws JSONException {
+
+        JSONObject forecastJson = new JSONObject(forecastJsonStr);
+        JSONArray jsonWeatherArray = forecastJson.getJSONArray(OWM_LIST);
+
+        /* Is there an error? */
+        if (forecastJson.has(OWM_MESSAGE_CODE)) {
+            int errorCode = forecastJson.getInt(OWM_MESSAGE_CODE);
+
+            switch (errorCode) {
+                case HttpURLConnection.HTTP_OK:
+                    break;
+                case HttpURLConnection.HTTP_NOT_FOUND:
+                    /* Location invalid */
+                    return null;
+                default:
+                    /* Server probably down */
+                    return null;
+            }
+        }
+
+        /*
+         * OWM returns daily forecasts based upon the local time of the city that is being asked
+         * for, which means that we need to know the GMT offset to translate this data properly.
+         * Since this data is also sent in-order and the first day is always the current day, we're
+         * going to take advantage of that to get a nice normalized UTC date for all of our weather.
+         */
+//        long now = System.currentTimeMillis();
+//        long normalizedUtcStartDay = SunshineDateUtils.normalizeDate(now);
+
+        long normalizedUtcStartDay = SunshineDateUtils.getNormalizedUtcDateForToday();
+
+        long dateTimeMillis;
+
+        double high;
+        double low;
+
+        int weatherId;
+
+            /* Get the JSON object representing the day */
+        JSONObject dayForecast = jsonWeatherArray.getJSONObject(0);
+
+            /*
+             * We ignore all the datetime values embedded in the JSON and assume that
+             * the values are returned in-order by day (which is not guaranteed to be correct).
+             */
+        dateTimeMillis = normalizedUtcStartDay;
+
+            /*
+             * Description is in a child array called "weather", which is 1 element long.
+             * That element also contains a weather code.
+             */
+        JSONObject weatherObject =
+                dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
+
+        weatherId = weatherObject.getInt(OWM_WEATHER_ID);
+
+            /*
+             * Temperatures are sent by Open Weather Map in a child object called "temp".
+             *
+             * Editor's Note: Try not to name variables "temp" when working with temperature.
+             * It confuses everybody. Temp could easily mean any number of things, including
+             * temperature, temporary variable, temporary folder, temporary employee, or many
+             * others, and is just a bad variable name.
+             */
+        JSONObject temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
+        high = temperatureObject.getDouble(OWM_MAX);
+        low = temperatureObject.getDouble(OWM_MIN);
+
+        ContentValues weatherValues = new ContentValues();
+        weatherValues.put(WeatherContract.WeatherEntry.COLUMN_DATE, dateTimeMillis);
+        weatherValues.put(WeatherContract.WeatherEntry.COLUMN_MAX_TEMP, high);
+        weatherValues.put(WeatherContract.WeatherEntry.COLUMN_MIN_TEMP, low);
+        weatherValues.put(WeatherContract.WeatherEntry.COLUMN_WEATHER_ID, weatherId);
+        weatherValues.put(WatchlistContract.WatchlistEntry.COLUMN_LOCATION, location);
+
+
+        return weatherValues;
     }
 }

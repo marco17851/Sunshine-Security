@@ -2,12 +2,14 @@ package com.example.android.sunshine;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.android.sunshine.sync.SunshineSyncTask;
 import com.example.android.sunshine.utilities.SunshineDrawerUtils;
 
 public class AddLocationActivity extends Activity {
@@ -29,9 +31,19 @@ public class AddLocationActivity extends Activity {
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String location = mLocationInput.getText().toString();
+                final String location = mLocationInput.getText().toString();
                 if (!location.equals("")){
-                    SunshineDrawerUtils.startWatchingLocation(mContext, location);
+
+                    AsyncTask<Void, Void, Void> mFetchWeatherTask = new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            SunshineSyncTask.syncWatchListLocation(mContext, location);
+                            SunshineDrawerUtils.startWatchingLocation(mContext, location);
+                            return null;
+                        }
+                    };
+
+                    mFetchWeatherTask.execute();
                     finish();
                 }
             }

@@ -109,6 +109,10 @@ public final class NetworkUtils {
         }
     }
 
+    public static URL getUrlForLocation(String location) {
+            return buildUrlWithLocationQuery(location);
+    }
+
     /**
      * Builds the URL used to talk to the weather server using latitude and longitude of a
      * location.

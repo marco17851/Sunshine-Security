@@ -57,8 +57,12 @@ class WatchlistAdapter extends RecyclerView.Adapter<WatchlistAdapter.WatchlistAd
 
     @Override
     public void onBindViewHolder(WatchlistAdapterViewHolder holder, int position) {
-        holder.locationView.setText(mLocations.get(position));
+        if (mCursor.getCount() == 0){
+            return;
+        }
         mCursor.moveToPosition(position);
+
+        holder.locationView.setText(mCursor.getString(MainActivity.INDEX_WATCHLIST_LOCATION));
 
         int weatherId = mCursor.getInt(MainActivity.INDEX_WEATHER_CONDITION_ID);
         int weatherImageId;

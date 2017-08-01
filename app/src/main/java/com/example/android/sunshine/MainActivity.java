@@ -42,6 +42,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.sunshine.data.SunshinePreferences;
+import com.example.android.sunshine.data.WatchlistContract;
 import com.example.android.sunshine.data.WeatherContract;
 import com.example.android.sunshine.sync.SunshineSyncUtils;
 import com.example.android.sunshine.utilities.SunshineDrawerUtils;
@@ -67,6 +68,14 @@ public class MainActivity extends AppCompatActivity implements
             WeatherContract.WeatherEntry.COLUMN_WEATHER_ID,
     };
 
+    public static final String[] MAIN_WATCHLIST_PROJECTION = {
+            WatchlistContract.WatchlistEntry.COLUMN_DATE,
+            WatchlistContract.WatchlistEntry.COLUMN_MAX_TEMP,
+            WatchlistContract.WatchlistEntry.COLUMN_MIN_TEMP,
+            WatchlistContract.WatchlistEntry.COLUMN_WEATHER_ID,
+            WatchlistContract.WatchlistEntry.COLUMN_LOCATION,
+    };
+
     /*
      * We store the indices of the values in the array of Strings above to more quickly be able to
      * access the data from our query. If the order of the Strings above changes, these indices
@@ -76,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements
     public static final int INDEX_WEATHER_MAX_TEMP = 1;
     public static final int INDEX_WEATHER_MIN_TEMP = 2;
     public static final int INDEX_WEATHER_CONDITION_ID = 3;
+    public static final int INDEX_WATCHLIST_LOCATION = 4;
 
 
     /*
@@ -319,19 +329,19 @@ public class MainActivity extends AppCompatActivity implements
 
             case ID_WATCHLIST_LOADER:
                 /* URI for all rows of weather data in our weather table */
-                forecastQueryUri = WeatherContract.WeatherEntry.CONTENT_URI;
+                forecastQueryUri = WatchlistContract.WatchlistEntry.CONTENT_URI;
                 /* Sort order: Ascending by date */
-                sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+                sortOrder = WatchlistContract.WatchlistEntry.COLUMN_LOCATION + " ASC";
                 /*
                  * A SELECTION in SQL declares which rows you'd like to return. In our case, we
                  * want all weather data from today onwards that is stored in our weather table.
                  * We created a handy method to do that in our WeatherEntry class.
                  */
-                selection = WeatherContract.WeatherEntry.getSqlSelectForTodayOnwards();
+                selection = null;
 
                 return new CursorLoader(this,
                         forecastQueryUri,
-                        MAIN_FORECAST_PROJECTION,
+                        MAIN_WATCHLIST_PROJECTION,
                         selection,
                         null,
                         sortOrder);
@@ -376,6 +386,7 @@ public class MainActivity extends AppCompatActivity implements
          * displaying the data.
          */
         mForecastAdapter.swapCursor(null);
+        mWatchlistAdapter.swapCursor(null);
     }
 
     @Override

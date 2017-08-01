@@ -21,6 +21,7 @@ import android.content.Context;
 import android.text.format.DateUtils;
 
 import com.example.android.sunshine.data.SunshinePreferences;
+import com.example.android.sunshine.data.WatchlistContract;
 import com.example.android.sunshine.data.WeatherContract;
 import com.example.android.sunshine.utilities.NetworkUtils;
 import com.example.android.sunshine.utilities.NotificationUtils;
@@ -106,6 +107,38 @@ public class SunshineSyncTask {
 
             /* If the code reaches this point, we have successfully performed our sync */
 
+            }
+
+        } catch (Exception e) {
+            /* Server probably invalid */
+            e.printStackTrace();
+        }
+    }
+
+    synchronized public static void syncWatchListLocation(Context context, String location){
+
+        try {
+            URL weatherRequestUrl = NetworkUtils.getUrlForLocation(location);
+
+            String jsonWeatherResponse = NetworkUtils.getResponseFromHttpUrl(weatherRequestUrl);
+
+            ContentValues weatherValues = OpenWeatherJsonUtils
+                    .getLocationContentValuesFromJson(location, jsonWeatherResponse);
+
+            if (weatherValues != null && weatherValues.size() != 0) {
+                /* Get a handle on the ContentResolver to delete and insert data */
+                ContentResolver sunshineContentResolver = context.getContentResolver();
+
+                /* Delete old weather data because we don't need to keep multiple days' data */
+                sunshineContentResolver.delete(
+                        WatchlistContract.WatchlistEntry.CONTENT_URI,
+                        null,
+                        null);
+
+                /* Insert our new weather data into Sunshine's ContentProvider */
+                sunshineContentResolver.insert(
+                        WatchlistContract.WatchlistEntry.CONTENT_URI,
+                        weatherValues);
             }
 
         } catch (Exception e) {

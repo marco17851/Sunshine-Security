@@ -32,4 +32,6 @@ public class SunshineSyncIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         SunshineSyncTask.syncWeather(this);
     }
+
+
 }

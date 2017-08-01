@@ -360,6 +360,14 @@ public class WeatherProvider extends ContentProvider {
 
                 break;
 
+            case CODE_WATCHLIST:
+                numRowsDeleted = mOpenHelper.getWritableDatabase().delete(
+                        WatchlistContract.WatchlistEntry.TABLE_NAME,
+                        selection,
+                        selectionArgs);
+
+                break;
+
             case CODE_WATCHLIST_WITH_LOCATION:
                 String locationSelection = uri.getLastPathSegment();
 
@@ -407,7 +415,7 @@ public class WeatherProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         long rowID;
         switch (sUriMatcher.match(uri)) {
-            case CODE_WATCHLIST_WITH_LOCATION:
+            case CODE_WATCHLIST:
                 rowID = mOpenHelper.getWritableDatabase().insert(
                         WatchlistContract.WatchlistEntry.TABLE_NAME,
                         null,
