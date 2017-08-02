@@ -46,6 +46,7 @@ import com.example.android.sunshine.data.WatchlistContract;
 import com.example.android.sunshine.data.WeatherContract;
 import com.example.android.sunshine.sync.SunshineSyncUtils;
 import com.example.android.sunshine.utilities.SunshineDrawerUtils;
+import com.example.android.sunshine.utilities.SunshineLogger;
 
 import org.w3c.dom.Text;
 
@@ -285,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         } else {
-            Log.d(TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
+            SunshineLogger.log(Log.DEBUG, TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
         }
     }
 

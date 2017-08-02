@@ -132,7 +132,7 @@ public final class NetworkUtils {
 
         try {
             URL weatherQueryUrl = new URL(weatherQueryUri.toString());
-            Log.v(TAG, "URL: " + weatherQueryUrl);
+            SunshineLogger.log(Log.VERBOSE, TAG, "URL: " + weatherQueryUrl);
             return weatherQueryUrl;
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -157,7 +157,7 @@ public final class NetworkUtils {
 
         try {
             URL weatherQueryUrl = new URL(weatherQueryUri.toString());
-            Log.v(TAG, "URL: " + weatherQueryUrl);
+            SunshineLogger.log(Log.VERBOSE, TAG, "URL: " + weatherQueryUrl);
             return weatherQueryUrl;
         } catch (MalformedURLException e) {
             e.printStackTrace();

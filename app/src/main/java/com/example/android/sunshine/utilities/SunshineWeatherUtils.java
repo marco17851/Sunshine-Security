@@ -360,7 +360,7 @@ public final class SunshineWeatherUtils {
             return R.drawable.ic_clear;
         }
 
-        Log.e(LOG_TAG, "Unknown Weather: " + weatherId);
+        SunshineLogger.log(Log.ERROR, LOG_TAG, "Unknown Weather: " + weatherId);
         return R.drawable.ic_storm;
     }
 
@@ -413,7 +413,7 @@ public final class SunshineWeatherUtils {
             return R.drawable.art_clear;
         }
 
-        Log.e(LOG_TAG, "Unknown Weather: " + weatherId);
+        SunshineLogger.log(Log.ERROR, LOG_TAG, "Unknown Weather: " + weatherId);
         return R.drawable.art_storm;
     }
 }
