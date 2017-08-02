@@ -32,34 +32,6 @@ public class WatchlistAdapterTest {
     }
 
     @Test
-    public void shouldSetLocationsWhenGivenASet() {
-        Set<String> locations = new TreeSet<>();
-        locations.add("Paris, France");
-
-        adapter.setLocations(locations);
-
-        assertEquals(1, adapter.getItemCount());
-    }
-
-    @Test
-    public void shouldDeleteLocationFromAdapterAndPreferencesAndReturnDeletedLocation(){
-        Set<String> locations = new TreeSet<>();
-        locations.add("Chicago, Illinois");
-        locations.add("New York, New York");
-        locations.add("Paris, France");
-        locations.add("Seoul, South Korea");
-
-        adapter.setLocations(locations);
-
-        assertEquals(4, adapter.getItemCount());
-
-        String deletedLocation = adapter.deleteLocation(0);
-
-        assertEquals("Chicago, Illinois", deletedLocation);
-        assertEquals(3, adapter.getItemCount());
-    }
-
-    @Test
     public void shouldSwapCursorAndClosePreviousOne(){
         Cursor firstCursor = mock(Cursor.class);
         adapter.swapCursor(firstCursor);

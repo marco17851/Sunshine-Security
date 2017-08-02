@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.preference.PreferenceManager;
+import android.widget.Toast;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -39,5 +40,13 @@ public class SunshineDrawerUtils {
         }
 
         sharedPreferences.edit().putStringSet("watch_locations", locations).apply();
+    }
+
+    public static void toastLocations(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        Set<String> locations = sharedPreferences.getStringSet("watch_locations", new TreeSet<String>());
+
+        Toast.makeText(context, locations.toString(), Toast.LENGTH_LONG).show();
     }
 }

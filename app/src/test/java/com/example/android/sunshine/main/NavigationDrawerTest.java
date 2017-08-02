@@ -24,7 +24,16 @@
 //import static org.junit.Assert.assertEquals;
 //
 //@RunWith(RobolectricTestRunner.class)
-//@Config(constants = BuildConfig.class)
+//@Config(constants = BuildConfig.class, sdk=23)
 //public class NavigationDrawerTest {
 //
+//    @Test
+//    public void onCreateShouldInflateTheMenu() {
+//        MainActivity dActivity = Robolectric.buildActivity(MainActivity.class).create().visible().get();
+//
+//        Menu menu = Shadows.shadowOf(dActivity).getOptionsMenu();
+//
+//        MenuItem item = menu.findItem(R.id.action_settings);
+//        assertEquals(item.getTitle().toString(), "Settings");
+//    }
 //}

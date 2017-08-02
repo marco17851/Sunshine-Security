@@ -211,14 +211,13 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.RIGHT){
-                    int position = viewHolder.getAdapterPosition();
+                    TextView textView = (TextView) viewHolder.itemView.findViewById(R.id.location);
+                    String location = textView.getText().toString();
 
-                    mWatchlistAdapter.deleteLocation(position);
+                    mWatchlistAdapter.deleteLocation(location);
                 }
 
-                if (mWatchlistAdapter.getItemCount() == 0){
-                    updateWatchedLocations(SunshineDrawerUtils.getLocations(MainActivity.this));
-                }
+                updateWatchedLocations();
             }
         });
 
@@ -237,14 +236,13 @@ public class MainActivity extends AppCompatActivity implements
         getSupportLoaderManager().initLoader(ID_FORECAST_LOADER, null, this);
         getSupportLoaderManager().initLoader(ID_WATCHLIST_LOADER, null, this);
 
-        updateWatchedLocations(SunshineDrawerUtils.getLocations(this));
+        updateWatchedLocations();
 
         SunshineSyncUtils.initialize(this);
     }
 
-    private void updateWatchedLocations(Set<String> mWatchedLocations) {
-        mWatchlistAdapter.setLocations(mWatchedLocations);
-        int size = mWatchedLocations.size();
+    private void updateWatchedLocations() {
+        int size = mWatchlistAdapter.getItemCount();
 
         if (size > 0){
             updateDrawer();
@@ -370,6 +368,7 @@ public class MainActivity extends AppCompatActivity implements
             if (data.getCount() != 0) showWeatherDataView();
         } else if (loader.getId() == ID_WATCHLIST_LOADER){
             mWatchlistAdapter.swapCursor(data);
+            updateWatchedLocations();
         }
     }
 
@@ -392,7 +391,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        updateWatchedLocations(SunshineDrawerUtils.getLocations(this));
+        updateWatchedLocations();
     }
 
     /**

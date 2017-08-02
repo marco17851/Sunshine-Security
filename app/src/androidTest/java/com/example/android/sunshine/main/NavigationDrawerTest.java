@@ -1,8 +1,11 @@
 package com.example.android.sunshine.main;
 
 import android.content.SharedPreferences;
+import android.database.DatabaseUtils;
+import android.support.test.espresso.DataInteraction;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.DrawerMatchers;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -10,6 +13,8 @@ import android.support.v7.preference.PreferenceManager;
 
 import com.example.android.sunshine.MainActivity;
 import com.example.android.sunshine.R;
+import com.example.android.sunshine.data.WatchlistContract;
+import com.example.android.sunshine.data.WeatherDbHelper;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,6 +25,8 @@ import org.junit.runner.RunWith;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static android.support.test.InstrumentationRegistry.getContext;
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -27,9 +34,11 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.AllOf.allOf;
 
 
@@ -39,6 +48,8 @@ public class NavigationDrawerTest {
     @Rule
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class);
 
+    private String fakeCity = "Fake City, Fakeland";
+
     @Before
     public void setup(){
         onView(ViewMatchers.withId(R.id.drawer_layout)).perform(DrawerActions.open());
@@ -46,7 +57,7 @@ public class NavigationDrawerTest {
 
     @After
     public void cleanup(){
-        clearLocationWatchlist();
+        clearDatabaseTable();
     }
 
     @Test
@@ -70,14 +81,14 @@ public class NavigationDrawerTest {
 
     @Test
     public void watchlistShouldShowLocationAndWeatherDetailsAfterAddedThroughFAB(){
-        String paris = "Paris, France";
+
 
         onView(ViewMatchers.withId(R.id.navigation_drawer_fab)).perform(click());
-        onView(ViewMatchers.withId(R.id.new_location_input)).perform(typeText(paris)).perform(closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.new_location_input)).perform(typeText(fakeCity)).perform(closeSoftKeyboard());
         onView(ViewMatchers.withId(R.id.save_location)).perform(click());
 
         onView(ViewMatchers.withId(R.id.location))
-                .check(matches(withText(paris)))
+                .check(matches(withText(fakeCity)))
                 .check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         onView(allOf(ViewMatchers.withId(R.id.high_temperature), withParent(withId(R.id.navigation_list_item))))
                 .check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
@@ -91,14 +102,12 @@ public class NavigationDrawerTest {
     
     @Test
     public void shouldBeAbleToDeleteLocationOnRightSwipe(){
-        String paris = "Paris, France";
-
         onView(ViewMatchers.withId(R.id.navigation_drawer_fab)).perform(click());
-        onView(ViewMatchers.withId(R.id.new_location_input)).perform(typeText(paris)).perform(closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.new_location_input)).perform(typeText(fakeCity)).perform(closeSoftKeyboard());
         onView(ViewMatchers.withId(R.id.save_location)).perform(click());
 
         onView(ViewMatchers.withId(R.id.location))
-                .check(matches(withText(paris)))
+                .check(matches(withText(fakeCity)))
                 .check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         onView(withId(R.id.location))
@@ -106,10 +115,26 @@ public class NavigationDrawerTest {
         onView(ViewMatchers.withId(R.id.navigation_body_text)).check(matches(withText(R.string.drawer_body_empty)));
     }
 
-    private void clearLocationWatchlist() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activityRule.getActivity().getApplicationContext());
-        Set<String> locations = preferences.getStringSet("watch_locations", new TreeSet<String>());
-        locations.clear();
-        preferences.edit().putStringSet("watch_locations", locations).apply();
+    @Test
+    public void shouldShowMultipleCitiesInNavigationDrawer(){
+        onView(ViewMatchers.withId(R.id.navigation_drawer_fab)).perform(click());
+        onView(ViewMatchers.withId(R.id.new_location_input)).perform(typeText(fakeCity)).perform(closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.save_location)).perform(click());
+
+        String otherCity = "Other City, Fakeland";
+
+        onView(ViewMatchers.withId(R.id.navigation_drawer_fab)).perform(click());
+        onView(ViewMatchers.withId(R.id.new_location_input)).perform(typeText(otherCity)).perform(closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.save_location)).perform(click());
+
+        onView(withId(R.id.navigation_recycler_view))
+                .check(matches(hasDescendant(withText(fakeCity))))
+                .check(matches(hasDescendant(withText(otherCity))));
     }
+
+    private void clearDatabaseTable() {
+        activityRule.getActivity().getApplicationContext().getContentResolver()
+                .delete(WatchlistContract.WatchlistEntry.CONTENT_URI, null, null);
+    }
+
 }

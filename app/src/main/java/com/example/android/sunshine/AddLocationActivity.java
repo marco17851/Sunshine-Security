@@ -38,7 +38,6 @@ public class AddLocationActivity extends Activity {
                         @Override
                         protected Void doInBackground(Void... voids) {
                             SunshineSyncTask.syncWatchListLocation(mContext, location);
-                            SunshineDrawerUtils.startWatchingLocation(mContext, location);
                             return null;
                         }
                     };

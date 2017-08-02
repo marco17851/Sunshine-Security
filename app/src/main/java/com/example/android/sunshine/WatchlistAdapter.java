@@ -1,7 +1,9 @@
 package com.example.android.sunshine;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,7 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.android.sunshine.data.WatchlistContract;
+import com.example.android.sunshine.sync.SunshineSyncTask;
 import com.example.android.sunshine.utilities.SunshineDateUtils;
 import com.example.android.sunshine.utilities.SunshineDrawerUtils;
 import com.example.android.sunshine.utilities.SunshineWeatherUtils;
@@ -23,16 +28,10 @@ import java.util.Set;
 
 class WatchlistAdapter extends RecyclerView.Adapter<WatchlistAdapter.WatchlistAdapterViewHolder> {
     private Context mContext;
-    private ArrayList<String> mLocations;
     private Cursor mCursor;
 
     public WatchlistAdapter(@NonNull Context context) {
         mContext = context;
-    }
-
-    public void setLocations(Set<String> locations){
-        mLocations = new ArrayList<>();
-        mLocations.addAll(locations);
     }
 
     @Override
@@ -57,7 +56,7 @@ class WatchlistAdapter extends RecyclerView.Adapter<WatchlistAdapter.WatchlistAd
 
     @Override
     public void onBindViewHolder(WatchlistAdapterViewHolder holder, int position) {
-        if (mCursor.getCount() == 0){
+        if (mCursor == null || mCursor.getCount() == 0){
             return;
         }
         mCursor.moveToPosition(position);
@@ -121,15 +120,20 @@ class WatchlistAdapter extends RecyclerView.Adapter<WatchlistAdapter.WatchlistAd
 
     @Override
     public int getItemCount() {
-        return mLocations.size();
+        if (mCursor == null){
+            return 0;
+        }
+        return mCursor.getCount();
     }
 
-    public String deleteLocation(int position) {
-        String location = mLocations.remove(position);
-        SunshineDrawerUtils.removeLocation(mContext, location);
+    public void deleteLocation(String location) {
+        ContentResolver resolver = mContext.getContentResolver();
+
+        resolver.delete(WatchlistContract.WatchlistEntry.CONTENT_URI.buildUpon().appendPath(location).build(),
+                null,
+                null);
         notifyDataSetChanged();
 
-        return location;
     }
 
     /**

@@ -18,6 +18,8 @@ package com.example.android.sunshine.sync;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.format.DateUtils;
 
 import com.example.android.sunshine.data.SunshinePreferences;
@@ -26,6 +28,7 @@ import com.example.android.sunshine.data.WeatherContract;
 import com.example.android.sunshine.utilities.NetworkUtils;
 import com.example.android.sunshine.utilities.NotificationUtils;
 import com.example.android.sunshine.utilities.OpenWeatherJsonUtils;
+import com.example.android.sunshine.utilities.SunshineDrawerUtils;
 
 import java.net.URL;
 
@@ -115,7 +118,7 @@ public class SunshineSyncTask {
         }
     }
 
-    synchronized public static void syncWatchListLocation(Context context, String location){
+    synchronized public static void syncWatchListLocation(final Context context, String location){
 
         try {
             URL weatherRequestUrl = NetworkUtils.getUrlForLocation(location);
@@ -129,11 +132,11 @@ public class SunshineSyncTask {
                 /* Get a handle on the ContentResolver to delete and insert data */
                 ContentResolver sunshineContentResolver = context.getContentResolver();
 
-                /* Delete old weather data because we don't need to keep multiple days' data */
-                sunshineContentResolver.delete(
-                        WatchlistContract.WatchlistEntry.CONTENT_URI,
-                        null,
-                        null);
+//                /* Delete old weather data because we don't need to keep multiple days' data */
+//                sunshineContentResolver.delete(
+//                        WatchlistContract.WatchlistEntry.CONTENT_URI,
+//                        null,
+//                        null);
 
                 /* Insert our new weather data into Sunshine's ContentProvider */
                 sunshineContentResolver.insert(
