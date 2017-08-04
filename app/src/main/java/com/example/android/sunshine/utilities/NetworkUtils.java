@@ -26,7 +26,12 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
 
 /**
  * These utilities will be used to communicate with the weather servers.
@@ -132,7 +137,7 @@ public final class NetworkUtils {
 
         try {
             URL weatherQueryUrl = new URL(weatherQueryUri.toString());
-            SunshineLogger.log(Log.VERBOSE, TAG, "URL: " + weatherQueryUrl);
+            Log.v(TAG, "URL: " + weatherQueryUrl);
             return weatherQueryUrl;
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -157,7 +162,7 @@ public final class NetworkUtils {
 
         try {
             URL weatherQueryUrl = new URL(weatherQueryUri.toString());
-            SunshineLogger.log(Log.VERBOSE, TAG, "URL: " + weatherQueryUrl);
+            Log.v(TAG, "URL: " + weatherQueryUrl);
             return weatherQueryUrl;
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -173,22 +178,34 @@ public final class NetworkUtils {
      * @throws IOException Related to network and stream reading
      */
     public static String getResponseFromHttpUrl(URL url) throws IOException {
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+
+        SSLContext sslContext;
+        String response = null;
+
         try {
+            sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, null, new java.security.SecureRandom());
+            urlConnection.setSSLSocketFactory(sslContext.getSocketFactory());
+
             InputStream in = urlConnection.getInputStream();
 
             Scanner scanner = new Scanner(in);
             scanner.useDelimiter("\\A");
 
             boolean hasInput = scanner.hasNext();
-            String response = null;
+
             if (hasInput) {
                 response = scanner.next();
             }
+
             scanner.close();
-            return response;
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            e.printStackTrace();
         } finally {
             urlConnection.disconnect();
         }
+
+        return response;
     }
 }

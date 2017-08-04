@@ -252,4 +252,9 @@
     <string name="save_location">Save Location</string>
     <string name="add_location">Add A Location</string>
 
+
+
+    <string name="firebase_permission">Sunshine.Firebase.Permission.Granted</string>
+    <string name="sync_intent_permission">Sunshine.Sync.Intent.Permission.Granted</string>
+
 </resources>
