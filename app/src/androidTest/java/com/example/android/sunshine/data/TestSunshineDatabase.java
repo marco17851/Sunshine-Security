@@ -432,6 +432,7 @@ public class TestSunshineDatabase {
                 expectedRecordCountAfterUpgrade,
                 shouldBeEmptyWeatherCursor.getCount());
 
+        shouldBeEmptyWeatherCursor.close();
         /* Test is over, close the cursor */
         database.close();
     }

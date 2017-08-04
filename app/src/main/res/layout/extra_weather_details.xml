@@ -32,7 +32,7 @@
 
         <!-- This guideline divides the layout into a left and right half and is used for alignment -->
         <android.support.constraint.Guideline
-            android:id="@+id/horizontal_middle"
+            android:id="@+id/horizontal_middle_extra_weather_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -53,7 +53,7 @@
             android:id="@+id/humidity"
             style="@style/ExtraWeatherMeasurement"
             app:layout_constraintBottom_toBottomOf="@+id/humidity_label"
-            app:layout_constraintLeft_toLeftOf="@+id/horizontal_middle"
+            app:layout_constraintLeft_toLeftOf="@+id/horizontal_middle_extra_weather_details"
             tools:text="38%"/>
 
         <!-- Pressure label -->
@@ -70,7 +70,7 @@
             android:id="@+id/pressure"
             style="@style/ExtraWeatherMeasurement"
             app:layout_constraintBottom_toBottomOf="@+id/pressure_label"
-            app:layout_constraintLeft_toLeftOf="@+id/horizontal_middle"
+            app:layout_constraintLeft_toLeftOf="@+id/horizontal_middle_extra_weather_details"
             tools:text="995 hPa"/>
 
         <!-- Wind label -->
@@ -88,7 +88,7 @@
             android:id="@+id/wind_measurement"
             style="@style/ExtraWeatherMeasurement"
             app:layout_constraintBottom_toBottomOf="@+id/wind_label"
-            app:layout_constraintLeft_toLeftOf="@+id/horizontal_middle"
+            app:layout_constraintLeft_toLeftOf="@+id/horizontal_middle_extra_weather_details"
             tools:text="4km/h NW"/>
 
     </android.support.constraint.ConstraintLayout>

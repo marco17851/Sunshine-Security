@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
+@Config(constants = BuildConfig.class, sdk = 25)
 public class WatchlistAdapterTest {
 
     private Application context;

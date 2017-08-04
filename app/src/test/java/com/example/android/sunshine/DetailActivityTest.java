@@ -26,7 +26,7 @@ import static org.junit.Assert.assertThat;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
+@Config(constants = BuildConfig.class, sdk = 25)
 public class DetailActivityTest {
 
     @Test

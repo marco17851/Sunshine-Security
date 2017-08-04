@@ -20,7 +20,7 @@ import java.util.TreeSet;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
+@Config(constants = BuildConfig.class, sdk = 25)
 public class SettingsFragmentTest {
 
     SettingsFragment fragment;
