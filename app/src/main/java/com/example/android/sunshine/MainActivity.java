@@ -16,7 +16,6 @@
 package com.example.android.sunshine;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,7 +26,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -39,18 +37,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.android.sunshine.addLocation.AddLocationActivity;
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.data.WatchlistContract;
 import com.example.android.sunshine.data.WeatherContract;
 import com.example.android.sunshine.sync.SunshineSyncUtils;
-import com.example.android.sunshine.utilities.SunshineDrawerUtils;
 import com.example.android.sunshine.utilities.SunshineLogger;
-
-import org.w3c.dom.Text;
-
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>,

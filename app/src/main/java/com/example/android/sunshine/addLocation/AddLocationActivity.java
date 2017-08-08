@@ -1,7 +1,6 @@
-package com.example.android.sunshine;
+package com.example.android.sunshine.addLocation;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -9,10 +8,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.android.sunshine.R;
 import com.example.android.sunshine.sync.SunshineSyncTask;
-import com.example.android.sunshine.utilities.SunshineDrawerUtils;
+
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 
 public class AddLocationActivity extends Activity {
+
+    @Inject
+    AddLocationPresenter mPresenter;
 
     private EditText mLocationInput;
     private Button mSaveButton;
