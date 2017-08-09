@@ -47,7 +47,7 @@ jobs:
           background: true
           parallel: true
       - circle-android wait-for-boot
-      - ./gradlew connectedAndroidTest:
+      - run: ./gradlew connectedAndroidTest
           timeout: 720
 
 
