@@ -31,7 +31,8 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: gradle dependencies
+      - run: sudo ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
+
 
       - save_cache:
           paths:
@@ -39,8 +40,8 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       # run tests!
-      - run: gradle test
-      - run: gradle connectedAndroidTest
+      - run: ./gradlew test
+      - run: ./gradlew connectedAndroidTest
 
 
 
