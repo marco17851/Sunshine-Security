@@ -232,7 +232,7 @@ public class ShowDetailsActivity extends AppCompatActivity implements
         WeatherData normalizedData = mPresenter.getWeatherData(data);
 
         if (normalizedData == null){
-            throw new SQLException("Data was able to be retrieved.");
+            throw new SQLException("Data was not able to be retrieved.");
         }
 
         int weatherImageId = SunshineWeatherUtils.getLargeArtResourceIdForWeatherCondition(normalizedData.getWeatherId());
