@@ -43,7 +43,15 @@ jobs:
 
       # run tests!
       - run: ./gradlew test
-      - run: ./gradlew connectedAndroidTest
+
+test:
+  override:
+    - emulator -avd circleci-android24 -no-window -gpu off:
+        background: true
+        parallel: true
+    - circle-android wait-for-boot
+    - ./gradlew connectedAndroidTest:
+        timeout: 720
 
 
 
