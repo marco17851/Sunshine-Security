@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.android.sunshine.R;
 
@@ -62,6 +63,6 @@ public class AddLocationActivity extends Activity implements AddLocationContract
 
     @Override
     public void showInvalidInputMessage() {
-        Snackbar.make(findViewById(R.id.save_location), getString(R.string.invalid_input), Snackbar.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.invalid_input), Toast.LENGTH_SHORT).show();
     }
 }
