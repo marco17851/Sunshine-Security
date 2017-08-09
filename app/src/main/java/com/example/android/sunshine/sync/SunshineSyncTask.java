@@ -132,12 +132,6 @@ public class SunshineSyncTask {
                 /* Get a handle on the ContentResolver to delete and insert data */
                 ContentResolver sunshineContentResolver = context.getContentResolver();
 
-//                /* Delete old weather data because we don't need to keep multiple days' data */
-//                sunshineContentResolver.delete(
-//                        WatchlistContract.WatchlistEntry.CONTENT_URI,
-//                        null,
-//                        null);
-
                 /* Insert our new weather data into Sunshine's ContentProvider */
                 sunshineContentResolver.insert(
                         WatchlistContract.WatchlistEntry.CONTENT_URI,

@@ -257,5 +257,6 @@
     <string name="firebase_permission">Sunshine.Firebase.Permission.Granted</string>
     <string name="sync_intent_permission">Sunshine.Sync.Intent.Permission.Granted</string>
     <string name="icon_content_description">Weather Icon</string>
+    <string name="invalid_input">Your input is invalid. Please correct.</string>
 
 </resources>

@@ -1,21 +1,20 @@
 package com.example.android.sunshine.addLocation;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.android.sunshine.R;
-import com.example.android.sunshine.sync.SunshineSyncTask;
 
 import javax.inject.Inject;
 
-import dagger.android.AndroidInjection;
+import static dagger.internal.Preconditions.checkNotNull;
 
-public class AddLocationActivity extends Activity {
+public class AddLocationActivity extends Activity implements AddLocationContract.View{
 
     @Inject
     AddLocationPresenter mPresenter;
@@ -31,28 +30,38 @@ public class AddLocationActivity extends Activity {
 
         mContext = getApplicationContext();
 
+        DaggerAddLocationComponent.builder()
+                .addLocationPresenterModule(new AddLocationPresenterModule(this))
+                .build()
+                .inject(this);
+
         mLocationInput = (EditText) findViewById(R.id.new_location_input);
         mSaveButton = (Button) findViewById(R.id.save_location);
 
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                final String location = mLocationInput.getText().toString();
-                if (!location.equals("")){
-
-                    AsyncTask<Void, Void, Void> mFetchWeatherTask = new AsyncTask<Void, Void, Void>() {
-                        @Override
-                        protected Void doInBackground(Void... voids) {
-                            SunshineSyncTask.syncWatchListLocation(mContext, location);
-                            return null;
-                        }
-                    };
-
-                    mFetchWeatherTask.execute();
+            public void onClick(View view) {
+                if (mPresenter.isInputValid(mContext, mLocationInput.getText().toString())){
+                    mPresenter.fetchWeather(mContext, mLocationInput.getText().toString());
                     finish();
                 }
+                showInvalidInputMessage();
             }
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void setPresenter(AddLocationContract.Presenter presenter) {
+        mPresenter = (AddLocationPresenter) checkNotNull(presenter);
+    }
+
+    @Override
+    public void showInvalidInputMessage() {
+        Snackbar.make(findViewById(R.id.save_location), getString(R.string.invalid_input), Snackbar.LENGTH_SHORT).show();
+    }
 }

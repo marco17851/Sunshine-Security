@@ -1,5 +1,7 @@
 package com.example.android.sunshine.addLocation;
 
+import com.example.android.sunshine.sync.SunshineSyncTask;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -8,7 +10,7 @@ public class AddLocationPresenterModule {
 
     private final AddLocationContract.View mView;
 
-    AddLocationPresenterModule (AddLocationContract.View view){
+    public AddLocationPresenterModule (AddLocationContract.View view){
         mView = view;
     }
 
