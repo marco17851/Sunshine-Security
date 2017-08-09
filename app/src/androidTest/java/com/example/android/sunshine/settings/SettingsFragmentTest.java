@@ -10,7 +10,7 @@
 //import android.support.v7.preference.PreferenceFragmentCompat;
 //import android.util.Log;
 //
-//import com.example.android.sunshine.MainActivity;
+//import com.example.android.sunshine.main.MainActivity;
 //import com.example.android.sunshine.R;
 //import com.example.android.sunshine.SettingsActivity;
 //import com.example.android.sunshine.SettingsFragment;

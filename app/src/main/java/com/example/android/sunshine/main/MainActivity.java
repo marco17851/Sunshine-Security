@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.sunshine;
+package com.example.android.sunshine.main;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -38,6 +38,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.android.sunshine.R;
 import com.example.android.sunshine.adapters.ForecastAdapter;
 import com.example.android.sunshine.adapters.WatchlistAdapter;
 import com.example.android.sunshine.addLocation.AddLocationActivity;
@@ -49,9 +50,14 @@ import com.example.android.sunshine.showDetails.ShowDetailsActivity;
 import com.example.android.sunshine.sync.SunshineSyncUtils;
 import com.example.android.sunshine.utilities.SunshineLogger;
 
+import javax.inject.Inject;
+
+import static dagger.internal.Preconditions.checkNotNull;
+
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>,
-        ForecastAdapter.ForecastAdapterOnClickHandler {
+        ForecastAdapter.ForecastAdapterOnClickHandler,
+        MainContract.View {
 
     private final String TAG = MainActivity.class.getSimpleName();
 
@@ -110,11 +116,19 @@ public class MainActivity extends AppCompatActivity implements
     private WatchlistAdapter mWatchlistAdapter;
     private FloatingActionButton mFAB;
 
+    @Inject
+    MainPresenter mPresenter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
+
+        DaggerMainComponent.builder()
+                .mainPresenterModule(new MainPresenterModule(this))
+                .build()
+                .inject(this);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -491,5 +505,10 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         super.onBackPressed();
+    }
+
+    @Override
+    public void setPresenter(MainContract.Presenter presenter) {
+        mPresenter = (MainPresenter) checkNotNull(presenter);
     }
 }

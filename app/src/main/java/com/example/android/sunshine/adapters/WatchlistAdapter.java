@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.sunshine.MainActivity;
+import com.example.android.sunshine.main.MainActivity;
 import com.example.android.sunshine.R;
 import com.example.android.sunshine.data.WatchlistContract;
 import com.example.android.sunshine.utilities.SunshineWeatherUtils;
