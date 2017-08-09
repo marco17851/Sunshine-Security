@@ -41,10 +41,18 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
+      # Disable emulator audio
+      machine:
+        environment:
+          QEMU_AUDIO_DRV: none
+
+      test:
+        pre:
+          - emulator -avd circleci-android24 -no-window:
+              background: true
+              parallel: true
+          - circle-android wait-for-boot
       # run tests!
       - run: ./gradlew test
-      - emulator -avd circleci-android24 -no-window -gpu off:
-          background: true
-          parallel: true
-      - circle-android wait-for-boot
+
       - run: ./gradlew connectedAndroidTest
