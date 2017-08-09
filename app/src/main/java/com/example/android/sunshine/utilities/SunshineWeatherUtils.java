@@ -371,7 +371,7 @@ public final class SunshineWeatherUtils {
      *   {@link #getSmallArtResourceIdForWeatherCondition(int)}.
      *
      * The difference between these two methods is that this method provides larger assets, used
-     * in the "today view" of the list, as well as in the DetailActivity.
+     * in the "today view" of the list, as well as in the ShowDetailsActivity.
      *
      * @param weatherId from OpenWeatherMap API response
      *                  See http://openweathermap.org/weather-conditions for a list of all IDs

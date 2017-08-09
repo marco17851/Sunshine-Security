@@ -41,9 +41,9 @@
             </intent-filter>
         </activity>
 
-        <!-- The manifest entry for our DetailActivity. Each Activity requires a manifest entry -->
+        <!-- The manifest entry for our ShowDetailsActivity. Each Activity requires a manifest entry -->
         <activity
-            android:name=".DetailActivity"
+            android:name=".showDetails.ShowDetailsActivity"
             android:label="@string/title_activity_detail"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">

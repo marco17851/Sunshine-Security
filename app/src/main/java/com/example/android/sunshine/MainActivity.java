@@ -38,10 +38,13 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.android.sunshine.adapters.ForecastAdapter;
+import com.example.android.sunshine.adapters.WatchlistAdapter;
 import com.example.android.sunshine.addLocation.AddLocationActivity;
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.data.WatchlistContract;
 import com.example.android.sunshine.data.WeatherContract;
+import com.example.android.sunshine.showDetails.ShowDetailsActivity;
 import com.example.android.sunshine.sync.SunshineSyncUtils;
 import com.example.android.sunshine.utilities.SunshineLogger;
 
@@ -396,7 +399,7 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void onClick(long date) {
-        Intent weatherDetailIntent = new Intent(MainActivity.this, DetailActivity.class);
+        Intent weatherDetailIntent = new Intent(MainActivity.this, ShowDetailsActivity.class);
         Uri uriForDateClicked = WeatherContract.WeatherEntry.buildWeatherUriWithDate(date);
         weatherDetailIntent.setData(uriForDateClicked);
         startActivity(weatherDetailIntent);

@@ -13,7 +13,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 
-import com.example.android.sunshine.DetailActivity;
+import com.example.android.sunshine.showDetails.ShowDetailsActivity;
 import com.example.android.sunshine.R;
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.data.WeatherContract;
@@ -112,9 +112,9 @@ public class NotificationUtils {
 
             /*
              * This Intent will be triggered when the user clicks the notification. In our case,
-             * we want to open Sunshine to the DetailActivity to display the newly updated weather.
+             * we want to open Sunshine to the ShowDetailsActivity to display the newly updated weather.
              */
-            Intent detailIntentForToday = new Intent(context, DetailActivity.class);
+            Intent detailIntentForToday = new Intent(context, ShowDetailsActivity.class);
             detailIntentForToday.setData(todaysWeatherUri);
 
             TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context);

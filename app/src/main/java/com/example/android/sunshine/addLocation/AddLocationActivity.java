@@ -45,8 +45,9 @@ public class AddLocationActivity extends Activity implements AddLocationContract
                 if (mPresenter.isInputValid(mContext, mLocationInput.getText().toString())){
                     mPresenter.fetchWeather(mContext, mLocationInput.getText().toString());
                     finish();
+                } else {
+                    showInvalidInputMessage();
                 }
-                showInvalidInputMessage();
             }
         });
     }

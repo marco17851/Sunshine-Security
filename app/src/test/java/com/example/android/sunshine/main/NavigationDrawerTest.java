@@ -9,7 +9,7 @@
 //import android.view.MenuItem;
 //
 //import com.example.android.sunshine.BuildConfig;
-//import com.example.android.sunshine.DetailActivity;
+//import com.example.android.sunshine.showDetails.ShowDetailsActivity;
 //import com.example.android.sunshine.MainActivity;
 //import com.example.android.sunshine.R;
 //

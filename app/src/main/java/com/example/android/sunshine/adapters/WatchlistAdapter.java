@@ -1,9 +1,8 @@
-package com.example.android.sunshine;
+package com.example.android.sunshine.adapters;
 
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,22 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.android.sunshine.MainActivity;
+import com.example.android.sunshine.R;
 import com.example.android.sunshine.data.WatchlistContract;
-import com.example.android.sunshine.sync.SunshineSyncTask;
-import com.example.android.sunshine.utilities.SunshineDateUtils;
-import com.example.android.sunshine.utilities.SunshineDrawerUtils;
 import com.example.android.sunshine.utilities.SunshineWeatherUtils;
-
-import java.util.ArrayList;
-import java.util.Set;
 
 /**
  * Created by MarcoBarragan on 7/25/17.
  */
 
-class WatchlistAdapter extends RecyclerView.Adapter<WatchlistAdapter.WatchlistAdapterViewHolder> {
+public class WatchlistAdapter extends RecyclerView.Adapter<WatchlistAdapter.WatchlistAdapterViewHolder> {
     private Context mContext;
     private Cursor mCursor;
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.sunshine;
+package com.example.android.sunshine.showDetails;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -30,12 +30,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.example.android.sunshine.R;
+import com.example.android.sunshine.SettingsActivity;
 import com.example.android.sunshine.data.WeatherContract;
 import com.example.android.sunshine.databinding.ActivityDetailBinding;
 import com.example.android.sunshine.utilities.SunshineDateUtils;
 import com.example.android.sunshine.utilities.SunshineWeatherUtils;
 
-public class DetailActivity extends AppCompatActivity implements
+public class ShowDetailsActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     /*
@@ -45,7 +47,7 @@ public class DetailActivity extends AppCompatActivity implements
     private static final String FORECAST_SHARE_HASHTAG = " #SunshineApp";
 
     /*
-     * The columns of data that we are interested in displaying within our DetailActivity's
+     * The columns of data that we are interested in displaying within our ShowDetailsActivity's
      * weather display.
      */
     public static final String[] WEATHER_DETAIL_PROJECTION = {
@@ -106,7 +108,7 @@ public class DetailActivity extends AppCompatActivity implements
         mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
 
         mUri = getIntent().getData();
-        if (mUri == null) throw new NullPointerException("URI for DetailActivity cannot be null");
+        if (mUri == null) throw new NullPointerException("URI for ShowDetailsActivity cannot be null");
 
         /* This connects our Activity into the loader lifecycle. */
         getSupportLoaderManager().initLoader(ID_DETAIL_LOADER, null, this);
@@ -138,7 +140,7 @@ public class DetailActivity extends AppCompatActivity implements
     /**
      * Callback invoked when a menu item was selected from this Activity's menu. Android will
      * automatically handle clicks on the "up" button for us so long as we have specified
-     * DetailActivity's parent Activity in the AndroidManifest.
+     * ShowDetailsActivity's parent Activity in the AndroidManifest.
      *
      * @param item The menu item that was selected by the user
      *
@@ -210,7 +212,7 @@ public class DetailActivity extends AppCompatActivity implements
 
     /**
      * Runs on the main thread when a load is complete. If initLoader is called (we call it from
-     * onCreate in DetailActivity) and the LoaderManager already has completed a previous load
+     * onCreate in ShowDetailsActivity) and the LoaderManager already has completed a previous load
      * for this Loader, onLoadFinished will be called immediately. Within onLoadFinished, we bind
      * the data to our views so the user can see the details of the weather on the date they
      * selected from the forecast.
