@@ -4,7 +4,6 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
-import dagger.android.ContributesAndroidInjector;
 
 @Module
 public final class SunshineApplicationModule {

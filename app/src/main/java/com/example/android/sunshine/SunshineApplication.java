@@ -3,12 +3,6 @@ package com.example.android.sunshine;
 import android.app.Application;
 import android.content.Context;
 
-import com.example.android.sunshine.addLocation.AddLocationActivity;
-import com.example.android.sunshine.addLocation.AddLocationPresenterModule;
-
-import javax.inject.Inject;
-
-
 public class SunshineApplication extends Application {
 
     public static SunshineApplication get(Context context) {

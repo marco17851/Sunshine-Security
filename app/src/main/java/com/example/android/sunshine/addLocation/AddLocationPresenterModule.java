@@ -1,7 +1,5 @@
 package com.example.android.sunshine.addLocation;
 
-import com.example.android.sunshine.sync.SunshineSyncTask;
-
 import dagger.Module;
 import dagger.Provides;
 

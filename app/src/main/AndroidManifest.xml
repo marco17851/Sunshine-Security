@@ -53,7 +53,7 @@
         </activity>
 
         <!-- The manifest entry for our SettingsActivity. Each Activity requires a manifest entry -->
-        <activity android:name=".SettingsActivity" />
+        <activity android:name=".settings.SettingsActivity" />
 
         <activity
             android:name=".addLocation.AddLocationActivity"

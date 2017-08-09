@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v7.preference.PreferenceManager;
 
+import com.example.android.sunshine.settings.SettingsActivity;
+import com.example.android.sunshine.settings.SettingsFragment;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

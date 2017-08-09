@@ -44,6 +44,7 @@ import com.example.android.sunshine.addLocation.AddLocationActivity;
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.data.WatchlistContract;
 import com.example.android.sunshine.data.WeatherContract;
+import com.example.android.sunshine.settings.SettingsActivity;
 import com.example.android.sunshine.showDetails.ShowDetailsActivity;
 import com.example.android.sunshine.sync.SunshineSyncUtils;
 import com.example.android.sunshine.utilities.SunshineLogger;
