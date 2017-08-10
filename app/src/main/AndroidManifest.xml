@@ -14,7 +14,7 @@
      limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.android.sunshine">
+    package="com.marco.android.sunshine">
 
     <!-- This permission is necessary in order for Sunshine to perform network access. -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -24,13 +24,13 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name=".SunshineApplication"
+        android:name="com.marco.android.sunshine.SunshineApplication"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
         <!-- The manifest entry for our MainActivity. Each Activity requires a manifest entry -->
         <activity
-            android:name=".main.MainActivity"
+            android:name="com.marco.android.sunshine.main.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.Forecast.NoActionBar">
@@ -43,44 +43,42 @@
 
         <!-- The manifest entry for our ShowDetailsActivity. Each Activity requires a manifest entry -->
         <activity
-            android:name=".showDetails.ShowDetailsActivity"
+            android:name="com.marco.android.sunshine.showDetails.ShowDetailsActivity"
             android:label="@string/title_activity_detail"
-            android:parentActivityName=".main.MainActivity"
+            android:parentActivityName="com.marco.android.sunshine.main.MainActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".main.MainActivity" />
+                android:value="com.marco.android.sunshine.main.MainActivity" />
         </activity>
 
         <!-- The manifest entry for our SettingsActivity. Each Activity requires a manifest entry -->
-        <activity android:name=".settings.SettingsActivity" />
+        <activity android:name="com.marco.android.sunshine.settings.SettingsActivity" />
 
         <activity
-            android:name=".addLocation.AddLocationActivity"
+            android:name="com.marco.android.sunshine.addLocation.AddLocationActivity"
             android:label="@string/title_activity_add_location"
-            android:parentActivityName=".main.MainActivity">
+            android:parentActivityName="com.marco.android.sunshine.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".main.MainActivity"/>
+                android:value="com.marco.android.sunshine.main.MainActivity"/>
         </activity>
 
         <!-- Our ContentProvider -->
         <provider
-            android:name=".data.WeatherProvider"
+            android:name="com.marco.android.sunshine.data.WeatherProvider"
             android:authorities="@string/content_authority"
             android:exported="false" />
 
         <!-- This is required for immediate syncs -->
         <service
-            android:name=".sync.SunshineSyncIntentService"
-            android:exported="false"
-            android:permission="@string/sync_intent_permission"/>
+            android:name="com.marco.android.sunshine.sync.SunshineSyncIntentService"
+            android:exported="false"/>
 
         <!-- This is the Service declaration used in conjunction with FirebaseJobDispatcher -->
         <service
-            android:name="com.example.android.sunshine.sync.SunshineFirebaseJobService"
-            android:exported="false"
-            android:permission="@string/firebase_permission">
+            android:name="com.marco.android.sunshine.sync.SunshineFirebaseJobService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>

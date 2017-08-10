@@ -1,0 +1,2 @@
+Extends the application by refactoring the architecture to be more MVP than MVC/MVVM.
+Also includes new features such as a Watchlist where you can add cities from "all over the world" and see their current weather.

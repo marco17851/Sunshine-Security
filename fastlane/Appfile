@@ -1,0 +1,2 @@
+json_key_file "/Users/MarcoBarragan/Desktop/Google Play Keys/fastlane.json" # Path to the json secret file - Follow https://github.com/fastlane/supply#setup to get one
+package_name "com.marco.android.sunshine" # e.g. com.krausefx.app
